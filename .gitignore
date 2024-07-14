@@ -1,0 +1,48 @@
+# Node modules
+node_modules/
+
+# Expo files
+.expo/
+.expo-shared/
+
+# VSCode directory
+.vscode/
+
+# Config file
+config.js
+
+# Mac system files
+.DS_Store
+
+# Logs
+*.log
+*.log.*
+
+# Build generated files
+build/
+dist/
+tmp/
+temp/
+
+# Bundler
+.bundle/
+
+# Yarn
+.yarn-integrity
+.yarn-cache/
+
+# React Native
+*.hmap
+*.xcworkspace
+*.xcodeproj
+*.pbxproj
+ios/Pods/
+ios/Podfile.lock
+ios/Podfile
+ios/build/
+android/.gradle/
+android/app/build/
+android/build/
+android/.idea/
+
+# NPM
