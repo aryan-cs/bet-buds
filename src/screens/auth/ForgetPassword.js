@@ -133,7 +133,7 @@ export default function ({ navigation }) {
                 justifyContent: "center",
               }}
             >
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() => {
                   isDarkmode ? setTheme("light") : setTheme("dark");
                 }}
@@ -147,7 +147,7 @@ export default function ({ navigation }) {
                 >
                   {isDarkmode ? "☀️ light theme" : "🌑 dark theme"}
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </View>
         </ScrollView>

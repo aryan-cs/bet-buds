@@ -12,6 +12,7 @@ import TabBarText from "../components/utils/TabBarText";
 import Create from "../screens/Create";
 import Groups from "../screens/Groups";
 import Tracker from "../screens/Tracker";
+import Master from "../screens/Master";
 import Loading from "../screens/utils/Loading";
 import SecondScreen from "../screens/SecondScreen";
 // Auth screens
@@ -19,6 +20,7 @@ import Login from "../screens/auth/Login";
 import Register from "../screens/auth/Register";
 import ForgetPassword from "../screens/auth/ForgetPassword";
 import { AuthContext } from "../provider/AuthProvider";
+import EventInfo from "../screens/EventInfo";
 
 const { firebaseConfig } = getEnvVars();
 
@@ -51,6 +53,7 @@ const Main = () => {
     >
       <MainStack.Screen name="MainTabs" component={MainTabs} />
       <MainStack.Screen name="SecondScreen" component={SecondScreen} />
+      <MainStack.Screen name="EventInfo" component={EventInfo} />
     </MainStack.Navigator>
   );
 };
@@ -60,17 +63,29 @@ const MainTabs = () => {
   const { isDarkmode } = useTheme();
   return (
     <Tabs.Navigator
-      initialRouteName="Create"
+      initialRouteName="Master"
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
           borderTopColor: isDarkmode ? themeColor.dark100 : "#c0c0c0",
           backgroundColor: isDarkmode ? themeColor.dark200 : "#ffffff",
+          display: "none",
         },
       }}
     >
-      {/* these icons using Ionicons */}
       <Tabs.Screen
+        name="Master"
+        component={Master}
+        options={{
+          tabBarLabel: ({ focused }) => (
+            <TabBarText focused={focused} title="Main" />
+          ),
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon focused={focused} icon={"cube"} />
+          ),
+        }}
+      />
+      {/* <Tabs.Screen
         name="Tracker"
         component={Tracker}
         options={{
@@ -81,8 +96,8 @@ const MainTabs = () => {
             <TabBarIcon focused={focused} icon={"clipboard"} />
           ),
         }}
-      />
-      <Tabs.Screen
+      /> */}
+      {/* <Tabs.Screen
         name="Create"
         component={Create}
         options={{
@@ -93,8 +108,8 @@ const MainTabs = () => {
             <TabBarIcon focused={focused} icon={"add-circle"} />
           ),
         }}
-      />
-      <Tabs.Screen
+      /> */}
+      {/* <Tabs.Screen
         name="Groups"
         component={Groups}
         options={{
@@ -105,7 +120,7 @@ const MainTabs = () => {
             <TabBarIcon focused={focused} icon={"people"} />
           ),
         }}
-      />
+      /> */}
     </Tabs.Navigator>
   );
 };

@@ -1,0 +1,14 @@
+2 Formats:
+    1. Randomized Bingo Board
+        Each group member gets a randomly placed bingo board with a bunch of bets that everyone inputted.
+        Whoever gets bingo first wins.
+    2. Parlay
+        At the beginning, players all rate bets on a scale of 1 to 5 stars, 5 being the most difficult.
+        Group members pick a number of bets to make a parlay. 
+        Each bet in the parlay has a point value attached to it based on the ratings.
+        Whoever gets the most points wins.
+
+
+1 Screen:
+    1. Groups Screen
+        Lists all the different joined events.
