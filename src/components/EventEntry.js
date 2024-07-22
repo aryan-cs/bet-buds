@@ -33,7 +33,7 @@ export default (props) => {
             }}>
             {/* <Image source={require('../../assets/register.png')} /> */}
             <SectionContent>
-                <Text size="h2" fontWeight="bold">{props.eventTitle}</Text>
+                <Text size="h3" fontWeight="bold">{props.eventTitle}</Text>
                 <Text style={{ fontSize: 20, marginTop: 3 }} italic="true">{props.eventType}</Text>
             </SectionContent>
         </View>

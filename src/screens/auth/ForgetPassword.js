@@ -76,7 +76,7 @@ export default function ({ navigation }) {
                 padding: 30,
               }}
             >
-              Forget Password
+              Forgot Password
             </Text>
             <Text>Email</Text>
             <TextInput
