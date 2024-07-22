@@ -21,6 +21,7 @@ import Register from "../screens/auth/Register";
 import ForgetPassword from "../screens/auth/ForgetPassword";
 import { AuthContext } from "../provider/AuthProvider";
 import EventInfo from "../screens/EventInfo";
+import ParlayInfo from "../screens/ParlayInfo";
 
 const { firebaseConfig } = getEnvVars();
 
@@ -52,8 +53,8 @@ const Main = () => {
       }}
     >
       <MainStack.Screen name="MainTabs" component={MainTabs} />
-      <MainStack.Screen name="SecondScreen" component={SecondScreen} />
       <MainStack.Screen name="EventInfo" component={EventInfo} />
+      <MainStack.Screen name="ParlayInfo" component={ParlayInfo} />
     </MainStack.Navigator>
   );
 };
@@ -85,42 +86,6 @@ const MainTabs = () => {
           ),
         }}
       />
-      {/* <Tabs.Screen
-        name="Tracker"
-        component={Tracker}
-        options={{
-          tabBarLabel: ({ focused }) => (
-            <TabBarText focused={focused} title="Tracker" />
-          ),
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} icon={"clipboard"} />
-          ),
-        }}
-      /> */}
-      {/* <Tabs.Screen
-        name="Create"
-        component={Create}
-        options={{
-          tabBarLabel: ({ focused }) => (
-            <TabBarText focused={focused} title="Create" />
-          ),
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} icon={"add-circle"} />
-          ),
-        }}
-      /> */}
-      {/* <Tabs.Screen
-        name="Groups"
-        component={Groups}
-        options={{
-          tabBarLabel: ({ focused }) => (
-            <TabBarText focused={focused} title="Groups" />
-          ),
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} icon={"people"} />
-          ),
-        }}
-      /> */}
     </Tabs.Navigator>
   );
 };
