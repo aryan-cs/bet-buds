@@ -80,7 +80,7 @@ export default function ({ navigation }) {
             </Text>
             <Text>Email</Text>
             <TextInput
-              containerStyle={{ marginTop: 15 }}
+              containerStyle={{ marginTop: 15, paddingHorizontal: 10 }}
               placeholder="Enter your email"
               value={email}
               autoCapitalize="none"
