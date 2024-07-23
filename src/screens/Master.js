@@ -37,7 +37,7 @@ export default function ({ navigation }) {
 
           <TouchableOpacity
             onPress={() => {
-              // navigation.navigate("New");
+              navigation.navigate("NewEvent");
             }}
             style={{
               marginLeft: "auto",
@@ -71,13 +71,13 @@ export default function ({ navigation }) {
         {/* <Section> */}
           {/* <SectionContent> */}
 
-            <EventEntry eventTitle = "Camping Trip" eventType = "bingo" eventEnd = {1731706636217}/>
-            <EventEntry eventTitle = "Pickle Ball Tournament" eventType = "classic" eventEnd = {1721736646217}/>
-            <EventEntry eventTitle = "9/11 Hangout" eventType = "classic" eventEnd = {1721706646317}/>
-            <EventEntry eventTitle = "Zumba Class Dinner" eventType = "classic" eventEnd = {1721703646217}/>
-            <EventEntry eventTitle = "Thanksgiving Party" eventType = "bingo" eventEnd = {1721706636217}/>
-            <EventEntry eventTitle = "P. D. Dy Party" eventType = "classic" eventEnd = {172136646217}/>
-            <EventEntry eventTitle = "Dhoti Function" eventType = "bingo" eventEnd = {1721703646217}/>
+            <EventEntry eventTitle = "Camping Trip" eventType = "Bingo" eventEnd = {1731706636217}/>
+            <EventEntry eventTitle = "Pickle Ball Tournament" eventType = "Classic" eventEnd = {1721736646217}/>
+            <EventEntry eventTitle = "9/11 Hangout" eventType = "Classic" eventEnd = {1721706646317}/>
+            <EventEntry eventTitle = "Zumba Class Dinner" eventType = "Classic" eventEnd = {1721703646217}/>
+            <EventEntry eventTitle = "Thanksgiving Party" eventType = "Bingo" eventEnd = {1721706636217}/>
+            <EventEntry eventTitle = "P. D. Dy Party" eventType = "Classic" eventEnd = {172136646217}/>
+            <EventEntry eventTitle = "Dhoti Function" eventType = "Bingo" eventEnd = {1721703646217}/>
 
             {/* <Text fontWeight="bold" style={{ textAlign: "center" }}>
               This is the create tab, where you can create a parlay for an event.
@@ -107,6 +107,17 @@ export default function ({ navigation }) {
                 marginTop: 10,
               }}
             /> */}
+
+            <Button
+              status="danger"
+              text="Logout"
+              onPress={() => {
+                signOut(auth);
+              }}
+              style={{
+                marginTop: 10,
+              }}
+            />
             <Button
               text={isDarkmode ? "Light Mode" : "Dark Mode"}
               status={isDarkmode ? "success" : "warning"}

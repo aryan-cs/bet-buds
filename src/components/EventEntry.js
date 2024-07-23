@@ -76,7 +76,7 @@ export default (props) => {
                     marginTop: 3,
                     // marginLeft: "auto",
                     color: isDarkmode ? themeColor.gray400 : themeColor.gray500,                    
-                  }} italic="true">{timeLeft > 0 ? formatTimeLeft(timeLeft) : 'event has ended'}</Text>
+                  }} italic="true">{timeLeft > 0 ? formatTimeLeft(timeLeft) : 'Event has ended'}</Text>
             </SectionContent>
         </View>
     </TouchableOpacity>

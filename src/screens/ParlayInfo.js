@@ -27,7 +27,6 @@ export default function ({ navigation }) {
         </Text>
         
       <ScrollView
-
         contentContainerStyle={{
           flexGrow: 1,
           alignContent: "center"

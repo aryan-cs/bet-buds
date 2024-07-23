@@ -47,13 +47,13 @@ export default (props) => {
                     }}>{props.parlayUser}</Text>
 
                 <Text
+                  // fontWeight="bold"
                   style={{
                     fontSize: 23,
                     marginLeft: 'auto',
                     marginVertical: "auto",
-                    // color: themeColor.primary,
-                  }}
-                  italic="true">{props.parlayProgress + "/10"}</Text>
+                    color: themeColor.primary,
+                  }}>{props.parlayProgress + "/10"}</Text>
             </SectionContent>
         </View>
     </TouchableOpacity>
