@@ -29,12 +29,31 @@ export default (props) => {
                 marginVertical: 10,
                 backgroundColor: isDarkmode ? themeColor.black100 : themeColor.white100,
                 borderRadius: 10,
-                height: 120,
+                // height: 120,
             }}>
             {/* <Image source={require('../../assets/register.png')} /> */}
-            <SectionContent>
-                <Text size="h3" fontWeight="bold">{props.parlayUser}</Text>
-                <Text style={{ fontSize: 20, marginTop: 3 }} italic="true">{props.parlayProgress + "/10"}</Text>
+            <SectionContent
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                
+              }}>
+                <Text
+                  size="h3"
+                  fontWeight="bold"
+                  style={{
+                    fontSize: 20,
+                    marginVertical: "auto",
+                    }}>{props.parlayUser}</Text>
+
+                <Text
+                  style={{
+                    fontSize: 23,
+                    marginLeft: 'auto',
+                    marginVertical: "auto",
+                    // color: themeColor.primary,
+                  }}
+                  italic="true">{props.parlayProgress + "/10"}</Text>
             </SectionContent>
         </View>
     </TouchableOpacity>

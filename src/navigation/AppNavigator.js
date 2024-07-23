@@ -9,12 +9,12 @@ import { useTheme, themeColor } from "react-native-rapi-ui";
 import TabBarIcon from "../components/utils/TabBarIcon";
 import TabBarText from "../components/utils/TabBarText";
 //Screens
-import Create from "../screens/Create";
-import Groups from "../screens/Groups";
-import Tracker from "../screens/Tracker";
+// import Create from "../screens/old/Create";
+// import Groups from "../screens/old/Groups";
+// import Tracker from "../screens/old/Tracker";
 import Master from "../screens/Master";
 import Loading from "../screens/utils/Loading";
-import SecondScreen from "../screens/SecondScreen";
+// import SecondScreen from "../screens/old/SecondScreen";
 // Auth screens
 import Login from "../screens/auth/Login";
 import Register from "../screens/auth/Register";

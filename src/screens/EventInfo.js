@@ -33,28 +33,14 @@ export default function ({ navigation }) {
           alignContent: "center"
         }}>
 
-        <ParlayEntry parlayUser = "P. Diddy" parlayProgress = {10} />
+        {/* these should be populated by score, like a leaderboard */}
+        <ParlayEntry parlayUser = "You" parlayProgress = {10} />
         <ParlayEntry parlayUser = "Player 2" parlayProgress = {2} />
         <ParlayEntry parlayUser = "Player 3" parlayProgress = {3} />
         <ParlayEntry parlayUser = "Player 4" parlayProgress = {1} />
         <ParlayEntry parlayUser = "Player 5" parlayProgress = {1} />
         <ParlayEntry parlayUser = "Player 6" parlayProgress = {9} />
         <ParlayEntry parlayUser = "Player 7" parlayProgress = {7} />
-
-        <Button
-            text={isDarkmode ? "Light Mode" : "Dark Mode"}
-            status={isDarkmode ? "success" : "warning"}
-            onPress={() => {
-            if (isDarkmode) {
-                setTheme("light");
-            } else {
-                setTheme("dark");
-            }
-            }}
-            style={{
-            marginTop: 10,
-            }}
-        />
 
       </ScrollView>
     </Layout>

@@ -1,5 +1,5 @@
-import React from "react";
-import {View, Image, StyleSheet, TouchableOpacity, } from 'react-native';
+import { React, useState, useEffect } from "react";
+import {View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import {
     Layout,
     Button,
@@ -18,6 +18,36 @@ export default (props) => {
   const { isDarkmode } = useTheme();
   const navigation = useNavigation();
 
+  const [timeLeft, setTimeLeft] = useState(props.eventEnd - Date.now());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeLeft(props.eventEnd - Date.now());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [props.eventEnd]);
+
+  const formatTimeLeft = (time) => {
+    const days = Math.floor(time / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((time % (1000 * 60)) / 1000);
+    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  };
+
+  // const formatTimeLeft = (time) => {
+  //   const days = Math.floor(time / (1000 * 60 * 60 * 24));
+  //   const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  //   const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
+  //   const seconds = Math.floor((time % (1000 * 60)) / 1000);
+
+  //   // Pad with zeroes to ensure two digits
+  //   const pad = (n) => (n < 10 ? '0' + n : n);
+
+  //   return `${pad(days)}:${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+  // };
+
   return (
     <TouchableOpacity
         onPress={() => {
@@ -29,12 +59,24 @@ export default (props) => {
                 marginVertical: 10,
                 backgroundColor: isDarkmode ? themeColor.black100 : themeColor.white100,
                 borderRadius: 10,
-                height: 120,
+                // height: 120,
             }}>
-            {/* <Image source={require('../../assets/register.png')} /> */}
             <SectionContent>
                 <Text size="h3" fontWeight="bold">{props.eventTitle}</Text>
-                <Text style={{ fontSize: 20, marginTop: 3 }} italic="true">{props.eventType}</Text>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    marginTop: 3,
+                    color: isDarkmode ? themeColor.gray400 : themeColor.gray500, 
+                  }}
+                  italic="true">{props.eventType}</Text>
+                <Text
+                  style={{
+                    fontSize: 18,
+                    marginTop: 3,
+                    // marginLeft: "auto",
+                    color: isDarkmode ? themeColor.gray400 : themeColor.gray500,                    
+                  }} italic="true">{timeLeft > 0 ? formatTimeLeft(timeLeft) : 'event has ended'}</Text>
             </SectionContent>
         </View>
     </TouchableOpacity>
