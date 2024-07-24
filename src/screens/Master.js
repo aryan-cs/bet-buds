@@ -80,7 +80,7 @@ export default function ({ navigation }) {
 
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("NewEvent");
+              navigation.navigate("Settings");
             }}
             style={{
               marginVertical: 'auto',
@@ -110,41 +110,7 @@ export default function ({ navigation }) {
         <EventEntry eventTitle = "Thanksgiving Party" eventType = "Bingo" eventEnd = {1721706636217}/>
         <EventEntry eventTitle = "P. D. Dy Party" eventType = "Classic" eventEnd = {172136646217}/>
         <EventEntry eventTitle = "Dhoti Function" eventType = "Bingo" eventEnd = {1721703646217}/>
-        <Button
-          status="danger"
-          text="Logout"
-          onPress={() => {
-            signOut(auth);
-          }}
-          style={{
-            marginTop: 10,
-          }}
-        />
 
-        <Button
-          status="danger"
-          text="Logout"
-          onPress={() => {
-            signOut(auth);
-          }}
-          style={{
-            marginTop: 10,
-          }}
-        />
-        <Button
-          text={isDarkmode ? "Light Mode" : "Dark Mode"}
-          status={isDarkmode ? "success" : "warning"}
-          onPress={() => {
-            if (isDarkmode) {
-              setTheme("light");
-            } else {
-              setTheme("dark");
-            }
-          }}
-          style={{
-            marginTop: 10,
-          }}
-        />
       </ScrollView>
     </Layout>
   );
