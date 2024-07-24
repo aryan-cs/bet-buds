@@ -21,6 +21,33 @@ export default function ({ navigation }) {
   return (
     <Layout>
 
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("NewEvent");
+        }}
+        style={{
+          position: "absolute",
+          right: 20,
+          bottom: 20,
+          zIndex: 1,
+          // backgroundColor: isDarkmode ? themeColor.black : themeColor.white,
+          backgroundColor: themeColor.primary,
+          borderRadius: 100,
+          width: 75,
+          height: 75,
+          alignItems: "center",
+          justifyContent: "center"
+        }}>
+        <Ionicons
+          // name={"add-circle"}
+          // name={"add-circle-outline"}
+          name={"add-outline"}
+          // color={ isDarkmode ? themeColor.dark : themeColor.white }
+          color={themeColor.white}
+          // color={themeColor.primary}
+          size={60}/>
+      </TouchableOpacity>
+
       <View
         style={{
           display: "flex",
@@ -35,7 +62,7 @@ export default function ({ navigation }) {
             paddingBottom: 5,
           }}> Your Events </Text>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => {
               navigation.navigate("NewEvent");
             }}
@@ -45,95 +72,79 @@ export default function ({ navigation }) {
             }}>
             <Ionicons
               // name={"add-circle"}
+              name={"add-circle-outline"}
+              // name={"add-outline"}
+              size={30}
+              color={ isDarkmode ? themeColor.white : themeColor.black }/>
+          </TouchableOpacity> */}
+
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("NewEvent");
+            }}
+            style={{
+              marginVertical: 'auto',
+              marginLeft: 5,
+              marginLeft: "auto",
+            }}>
+            <Ionicons
+              // name={"add-circle"}
               // name={"add-circle-outline"}
-              name={"add-outline"}
-              size={40}
-              color={
-                isDarkmode ? themeColor.white : themeColor.black
-              }/>
+              name={"ellipsis-vertical"}
+              size={25}
+              color={ isDarkmode ? themeColor.white : themeColor.black }/>
           </TouchableOpacity>
 
       </View>
         
       <ScrollView
-        // style={{
-        //   flex: 1,
-          // alignItems: "center",
-          // justifyContent: "center",
-          // marginHorizontal: 20,
-        // }}
         contentContainerStyle={{
           flexGrow: 1,
-          // alignItems: "center",
           alignContent: "center"
-        }}
-      >
-        {/* <Section> */}
-          {/* <SectionContent> */}
+        }}>
 
-            <EventEntry eventTitle = "Camping Trip" eventType = "Bingo" eventEnd = {1731706636217}/>
-            <EventEntry eventTitle = "Pickle Ball Tournament" eventType = "Classic" eventEnd = {1721736646217}/>
-            <EventEntry eventTitle = "9/11 Hangout" eventType = "Classic" eventEnd = {1721706646317}/>
-            <EventEntry eventTitle = "Zumba Class Dinner" eventType = "Classic" eventEnd = {1721703646217}/>
-            <EventEntry eventTitle = "Thanksgiving Party" eventType = "Bingo" eventEnd = {1721706636217}/>
-            <EventEntry eventTitle = "P. D. Dy Party" eventType = "Classic" eventEnd = {172136646217}/>
-            <EventEntry eventTitle = "Dhoti Function" eventType = "Bingo" eventEnd = {1721703646217}/>
+        <EventEntry eventTitle = "Camping Trip" eventType = "Bingo" eventEnd = {1731706636217}/>
+        <EventEntry eventTitle = "Pickle Ball Tournament" eventType = "Classic" eventEnd = {1721736646217}/>
+        <EventEntry eventTitle = "9/11 Hangout" eventType = "Classic" eventEnd = {1721706646317}/>
+        <EventEntry eventTitle = "Zumba Class Dinner" eventType = "Classic" eventEnd = {1721703646217}/>
+        <EventEntry eventTitle = "Thanksgiving Party" eventType = "Bingo" eventEnd = {1721706636217}/>
+        <EventEntry eventTitle = "P. D. Dy Party" eventType = "Classic" eventEnd = {172136646217}/>
+        <EventEntry eventTitle = "Dhoti Function" eventType = "Bingo" eventEnd = {1721703646217}/>
+        <Button
+          status="danger"
+          text="Logout"
+          onPress={() => {
+            signOut(auth);
+          }}
+          style={{
+            marginTop: 10,
+          }}
+        />
 
-            {/* <Text fontWeight="bold" style={{ textAlign: "center" }}>
-              This is the create tab, where you can create a parlay for an event.
-            </Text>
-            <Button
-              style={{ marginTop: 10 }}
-              text="Rapi UI Documentation"
-              status="info"
-              onPress={() => Linking.openURL("https://rapi-ui.kikiding.space/")}
-            />
-            <Button
-              text="Go to second screen"
-              onPress={() => {
-                navigation.navigate("SecondScreen");
-              }}
-              style={{
-                marginTop: 10,
-              }}
-            />
-            <Button
-              status="danger"
-              text="Logout"
-              onPress={() => {
-                signOut(auth);
-              }}
-              style={{
-                marginTop: 10,
-              }}
-            /> */}
-
-            <Button
-              status="danger"
-              text="Logout"
-              onPress={() => {
-                signOut(auth);
-              }}
-              style={{
-                marginTop: 10,
-              }}
-            />
-            <Button
-              text={isDarkmode ? "Light Mode" : "Dark Mode"}
-              status={isDarkmode ? "success" : "warning"}
-              onPress={() => {
-                if (isDarkmode) {
-                  setTheme("light");
-                } else {
-                  setTheme("dark");
-                }
-              }}
-              style={{
-                marginTop: 10,
-              }}
-            />
-          {/* </SectionContent> */}
-        {/* </Section> */}
+        <Button
+          status="danger"
+          text="Logout"
+          onPress={() => {
+            signOut(auth);
+          }}
+          style={{
+            marginTop: 10,
+          }}
+        />
+        <Button
+          text={isDarkmode ? "Light Mode" : "Dark Mode"}
+          status={isDarkmode ? "success" : "warning"}
+          onPress={() => {
+            if (isDarkmode) {
+              setTheme("light");
+            } else {
+              setTheme("dark");
+            }
+          }}
+          style={{
+            marginTop: 10,
+          }}
+        />
       </ScrollView>
     </Layout>
   );
