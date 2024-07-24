@@ -23,6 +23,7 @@ import { AuthContext } from "../provider/AuthProvider";
 import EventInfo from "../screens/EventInfo";
 import ParlayInfo from "../screens/ParlayInfo";
 import NewEvent from "../screens/NewEvent";
+import BingoSquareInfo from "../screens/BingoSquareInfo";
 
 const { firebaseConfig } = getEnvVars();
 
@@ -57,6 +58,7 @@ const Main = () => {
       <MainStack.Screen name="EventInfo" component={EventInfo} />
       <MainStack.Screen name="ParlayInfo" component={ParlayInfo} />
       <MainStack.Screen name="NewEvent" component={NewEvent} />
+      <MainStack.Screen name="BingoSquareInfo" component={BingoSquareInfo} />
     </MainStack.Navigator>
   );
 };

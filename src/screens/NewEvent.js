@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, ScrollView, Alert } from "react-native";
+import { View, ScrollView, Alert,StyleSheet } from "react-native";
 import {
   Layout,
   TopNav,
@@ -12,6 +12,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
+import BingoBoard from "../components/BingoBoard";
 
 export default function ({ navigation }) {
   const { isDarkmode, setTheme } = useTheme();
@@ -20,6 +21,7 @@ export default function ({ navigation }) {
   const [eventTime, setEventTime] = useState();
   const [eventEnd, setEventEnd] = useState(0);
   const [eventType, setEventType] = useState();
+  const [eventSize, setEventSize] = useState();
   
   return (
     <Layout>
@@ -41,7 +43,7 @@ export default function ({ navigation }) {
 
         }}>
 
-          <Text style={{ marginTop: 15 }}>Event name</Text>
+          <Text style={{ marginTop: 15 }} fontWeight="bold">Event Name</Text>
           <TextInput
             containerStyle={{ marginTop: 10, paddingHorizontal: 10 }}
             placeholder="Enter the name of the event"
@@ -54,7 +56,7 @@ export default function ({ navigation }) {
               flexDirection: "row",
               marginTop: 15
             }}>
-              <Text style={{ marginVertical: "auto" }}>Event expiration</Text>
+              <Text style={{ marginVertical: "auto" }} fontWeight="bold">Expiration</Text>
 
               <View
                 style={{
@@ -62,8 +64,8 @@ export default function ({ navigation }) {
                   flexDirection: "row",
                   marginLeft: 'auto',
                 }}>
-                  <DateTimePicker mode="date" display="default" value={new Date()} themeVariant={isDarkmode ? "dark" : "light"} />
-                  <DateTimePicker mode="time" display="default" value={new Date()} themeVariant={isDarkmode ? "dark" : "light"} />
+                  <DateTimePicker mode="date" display="default" value={new Date()} themeVariant={isDarkmode ? "dark" : "light"} accentColor={themeColor.primary}/>
+                  <DateTimePicker mode="time" display="default" value={new Date()} themeVariant={isDarkmode ? "dark" : "light"} accentColor={themeColor.primary}/>
                 </View>
           </View>
 
@@ -73,64 +75,121 @@ export default function ({ navigation }) {
               flexDirection: "row",
               marginTop: 15
             }}>
-              <Text style={{ marginVertical: "auto", }}>Event type</Text>
+              <Text style={{ marginVertical: "auto", }} fontWeight="bold">Game Mode</Text>
 
               <View
                 style={{
                   display: "flex",
                   flexDirection: "row",
                   marginLeft: "auto",
-                  paddingTop: 2,
                 }}>
                   <RNPickerSelect
                     placeholder={{
-                      label: 'Select an event type...',
+                      label: 'Select a game mode...',
                       value: null,
-                      color: '#9EA0A4',
                     }}
-                    onValueChange={(value) => console.log(value)}
                     items={[
-                      { label: 'Classic', value: 'Classic' },
-                      { label: 'Bingo', value: 'Bingo' },
-                    ]}                    
+                      { label: 'Classic', value: "Classic" },
+                      { label: 'Bingo', value: "Bingo" },
+                    ]}
+                    onValueChange={(value) => setEventType(value)}
+                    style={{
+                      inputIOS: {
+                        fontSize: 14,
+                        paddingVertical: 10,
+                        paddingHorizontal: 10,
+                        borderWidth: 1,
+                        borderRadius: 8,
+                        fontFamily: "Ubuntu_400Regular",
+                        backgroundColor: isDarkmode ? "#1f1f1f" : themeColor.white,
+                        borderColor: isDarkmode ?  "#333333" : "#d8d8d8",
+                        color: isDarkmode ? "#dddddd" : "black",
+                        onFocusborderColor: isDarkmode ? "#7f7f7f" : "#c0c0c0",
+                        placeholderTextColor: isDarkmode ? "#575757" : themeColor.gray300,
+                      },
+                      inputAndroid: {
+                        fontSize: 14,
+                        paddingHorizontal: 10,
+                        paddingVertical: 8,
+                        borderWidth: 1,
+                        borderRadius: 8,
+                        fontFamily: "Ubuntu_400Regular",
+                        backgroundColor: isDarkmode ? "#1f1f1f" : themeColor.white,
+                        borderColor: isDarkmode ? "#333333" : "#d8d8d8",
+                        color: isDarkmode ? "#dddddd" : "black",
+                        onFocusborderColor: isDarkmode ? "#7f7f7f" : "#c0c0c0",
+                        placeholderTextColor: isDarkmode ? "#575757" : themeColor.gray300,
+                      }
+                    }}
                   />
                 </View>
           </View>
 
-          <Text style={{ marginTop: 15 }}>Group size</Text>
           <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              marginTop: 15
+            }}>
+              <Text style={{ marginVertical: "auto", }} fontWeight="bold">Size</Text>
+
+              <View
                 style={{
                   display: "flex",
                   flexDirection: "row",
                   marginLeft: "auto",
-                  marginTop: -15
                 }}>
                   <RNPickerSelect
                     placeholder={{
                       label: 'Select a group size...',
                       value: null,
-                      color: '#9EA0A4',
                     }}
-                    onValueChange={(value) => console.log(value)}
                     items={[
-                      { label: '2', value: '2' },
-                      { label: '3', value: '3' },
-                      { label: '4', value: '4' },
-                      { label: '5', value: '5' },
-                      { label: '6', value: '6' },
-                      { label: '7', value: '7' },
-                      { label: '8', value: '8' },
-                      { label: '9', value: '9' },
-                      { label: '10', value: '10' },
-                    ]}                    
+                      { label: '2', value: 2 },
+                      { label: '3', value: 3 },
+                      { label: '4', value: 4 },
+                      { label: '5', value: 5 },
+                      { label: '6', value: 6 },
+                      { label: '7', value: 7 },
+                      { label: '8', value: 8 },
+                      { label: '9', value: 9 },
+                      { label: '10', value: 10 },
+                    ]}
+                    onValueChange={(value) => setEventSize(value)}
+                    style={{
+                      inputIOS: {
+                        fontSize: 14,
+                        paddingVertical: 10,
+                        paddingHorizontal: 10,
+                        borderWidth: 1,
+                        borderRadius: 8,
+                        fontFamily: "Ubuntu_400Regular",
+                        backgroundColor: isDarkmode ? "#1f1f1f" : themeColor.white,
+                        borderColor: isDarkmode ?  "#333333" : "#d8d8d8",
+                        color: isDarkmode ? "#dddddd" : "black",
+                        onFocusborderColor: isDarkmode ? "#7f7f7f" : "#c0c0c0",
+                        placeholderTextColor: isDarkmode ? "#575757" : themeColor.gray300,
+                      },
+                      inputAndroid: {
+                        fontSize: 14,
+                        paddingHorizontal: 10,
+                        paddingVertical: 8,
+                        borderWidth: 1,
+                        borderRadius: 8,
+                        fontFamily: "Ubuntu_400Regular",
+                        backgroundColor: isDarkmode ? "#1f1f1f" : themeColor.white,
+                        borderColor: isDarkmode ? "#333333" : "#d8d8d8",
+                        color: isDarkmode ? "#dddddd" : "black",
+                        onFocusborderColor: isDarkmode ? "#7f7f7f" : "#c0c0c0",
+                        placeholderTextColor: isDarkmode ? "#575757" : themeColor.gray300,
+                      }
+                    }}
                   />
                 </View>
+              </View>
 
       </ScrollView>
-    </Layout>
+    <BingoBoard/>
+  </Layout>
   );
 }
-
-//https://github.com/ManojKanth/React-native-toggle-button-with-text
-//https://www.youtube.com/watch?v=ad9f-EYtWPo&pp=ygUTcmVhY3QgbmF0aXZlIHRvZ2dsZQ%3D%3D
-

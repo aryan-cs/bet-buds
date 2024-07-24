@@ -1,20 +1,20 @@
 import React from "react";
 import { View, ScrollView } from "react-native";
 import {
+  Button,
   Layout,
-  TopNav,
   Text,
   themeColor,
   useTheme,
-  Button
 } from "react-native-rapi-ui";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from 'expo-linear-gradient';
 
-export default function ({ navigation }) {
+
+export default function ({ navigation, betName }) {
   const { isDarkmode } = useTheme();
-  
+
   return (
-    // lowkey this is all wrong its not supposed to show this its supposed to show a list of bets...
     <Layout>
       <Text
         size="h1"
