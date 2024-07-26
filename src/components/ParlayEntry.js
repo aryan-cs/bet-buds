@@ -1,5 +1,5 @@
 import React from "react";
-import {View, Image, StyleSheet, TouchableOpacity, } from 'react-native';
+import {View, Image, StyleSheet, TouchableHighlight, } from 'react-native';
 import {
     Layout,
     Button,
@@ -19,43 +19,43 @@ export default (props) => {
   const navigation = useNavigation();
 
   return (
-    <TouchableOpacity
-        onPress={() => {
-            navigation.navigate("ParlayInfo");
-        }}>
-        <View
+    <View
+      style={{
+          marginHorizontal: 20,
+          marginVertical: 10,
+          backgroundColor: isDarkmode ? themeColor.black100 : themeColor.white100,
+          borderRadius: 10,
+          // height: 120,
+      }}>
+        <TouchableHighlight
+          underlayColor={isDarkmode ? themeColor.black200 : themeColor.white200}
+          style={{borderRadius: 10}}
+          onPress={() => {
+              navigation.navigate("ParlayInfo");
+          }}>
+          <SectionContent
             style={{
-                marginHorizontal: 20,
-                marginVertical: 10,
-                backgroundColor: isDarkmode ? themeColor.black100 : themeColor.white100,
-                borderRadius: 10,
-                // height: 120,
+              display: "flex",
+              flexDirection: "row",
+              
             }}>
-            {/* <Image source={require('../../assets/register.png')} /> */}
-            <SectionContent
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                
-              }}>
-                <Text
-                  size="h3"
-                  fontWeight="bold"
-                  style={{
-                    fontSize: 20,
-                    marginVertical: "auto",
-                    }}>{props.parlayUser}</Text>
-
-                <Text
-                  // fontWeight="bold"
-                  style={{
-                    fontSize: 23,
-                    marginLeft: 'auto',
-                    marginVertical: "auto",
-                    color: themeColor.primary,
-                  }}>{props.parlayProgress + "/10"}</Text>
-            </SectionContent>
-        </View>
-    </TouchableOpacity>
+              <Text
+                size="h3"
+                // fontWeight="bold"
+                style={{
+                  fontSize: 20,
+                  marginVertical: "auto",
+                  }}>{props.parlayUser}</Text>
+              <Text
+                fontWeight="bold"
+                style={{
+                  fontSize: 23,
+                  marginLeft: 'auto',
+                  marginVertical: "auto",
+                  color: themeColor.primary,
+                }}>{props.parlayProgress + "/10"}</Text>
+          </SectionContent>
+        </TouchableHighlight>
+    </View>
   );
 };

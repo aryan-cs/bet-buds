@@ -15,7 +15,6 @@ export default function ({ navigation }) {
   const { isDarkmode } = useTheme();
   return (
     <Layout>
-
         <Text
           size="h1"
           fontWeight="bold"
@@ -25,14 +24,11 @@ export default function ({ navigation }) {
           }}>
             Event Info
         </Text>
-        
       <ScrollView
-
         contentContainerStyle={{
           flexGrow: 1,
           alignContent: "center"
         }}>
-
         {/* these should be populated by score, like a leaderboard */}
         <ParlayEntry parlayUser = "You" parlayProgress = {10} />
         <ParlayEntry parlayUser = "Player 2" parlayProgress = {2} />
@@ -41,7 +37,6 @@ export default function ({ navigation }) {
         <ParlayEntry parlayUser = "Player 5" parlayProgress = {1} />
         <ParlayEntry parlayUser = "Player 6" parlayProgress = {9} />
         <ParlayEntry parlayUser = "Player 7" parlayProgress = {7} />
-
       </ScrollView>
     </Layout>
   );

@@ -74,6 +74,8 @@ export default function ({ navigation }) {
             onPress={() => {
               // login();
             }}
+            type="TouchableHighlight"
+            underlayColor={themeColor.primary600}
             style={{
               margin: 20,
               marginBottom: 150

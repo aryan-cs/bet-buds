@@ -45,6 +45,8 @@ export default function ({ navigation }) {
         <Button
           text={isDarkmode ? "Switch to Light Mode" : "Switch to Dark Mode"}
           status={isDarkmode ? "black100" : "primary"}
+          type="TouchableHighlight"
+          underlayColor={isDarkmode ? themeColor.black200 : themeColor.primary600}
           onPress={() => {
             if (isDarkmode) {
               setTheme("light");
@@ -59,6 +61,8 @@ export default function ({ navigation }) {
         <Button
           status="danger"
           text="Logout"
+          type="TouchableHighlight"
+          underlayColor={themeColor.danger600}
           onPress={() => {
             signOut(auth);
           }}

@@ -105,6 +105,8 @@ export default function ({ navigation }) {
             />
             <Button
               text={loading ? "Loading" : "Continue"}
+              type="TouchableHighlight"
+              underlayColor={themeColor.primary600}
               onPress={() => {
                 login();
               }}

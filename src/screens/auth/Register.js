@@ -105,6 +105,8 @@ export default function ({ navigation }) {
             />
             <Button
               text={loading ? "Loading" : "Create an account"}
+              type="TouchableHighlight"
+              underlayColor={themeColor.primary600}
               onPress={() => {
                 register();
               }}

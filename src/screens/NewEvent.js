@@ -9,10 +9,12 @@ import {
   Button,
   TextInput
 } from "react-native-rapi-ui";
-import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
 import BingoBoard from "../components/BingoBoard";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { writeData, readData, observeAuthState, testWriteData, testReadData } from '../provider/BaseProvider';
+
 
 export default function ({ navigation }) {
   const { isDarkmode, setTheme } = useTheme();
@@ -22,6 +24,17 @@ export default function ({ navigation }) {
   const [eventEnd, setEventEnd] = useState(0);
   const [eventType, setEventType] = useState();
   const [eventSize, setEventSize] = useState();
+
+  const handleWrite = async () => {
+    console.log(eventName)
+    // await writeData("events", getAuth().currentUser.uid + Date.now(), ...
+    // await writeData("events", "members", { admin: getAuth().currentUser.uid });
+  };
+
+  const handleRead = async () => {
+    const data = await readData(collection, document);
+    setData(data);
+  };
   
   return (
     <Layout>
@@ -189,8 +202,19 @@ export default function ({ navigation }) {
                 </View>
               </View>
 
+              <Button
+                text="Create Event"
+                onPress={handleWrite}
+                type="TouchableHighlight"
+                underlayColor={themeColor.primary600}
+                style={{
+                  marginTop: "auto",
+                  marginBottom: 30,                  
+                }}
+              />
+
       </ScrollView>
-    <BingoBoard/>
+    {/* <BingoBoard/> */}
   </Layout>
   );
 }

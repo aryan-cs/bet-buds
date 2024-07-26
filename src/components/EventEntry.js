@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from "react";
-import {View, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import {View, Image, StyleSheet, TouchableOpacity, TouchableHighlight } from 'react-native';
 import {
     Layout,
     Button,
@@ -49,36 +49,37 @@ export default (props) => {
   // };
 
   return (
-    <TouchableOpacity
+    <View
+      style={{
+          marginHorizontal: 20,
+          marginVertical: 10,
+          backgroundColor: isDarkmode ? themeColor.black100 : themeColor.white100,
+          borderRadius: 10,
+      }}>
+      <TouchableHighlight
+        underlayColor={isDarkmode ? themeColor.black200 : themeColor.white200}
+        style={{borderRadius: 10}}
         onPress={() => {
             navigation.navigate("EventInfo");
         }}>
-        <View
-            style={{
-                marginHorizontal: 20,
-                marginVertical: 10,
-                backgroundColor: isDarkmode ? themeColor.black100 : themeColor.white100,
-                borderRadius: 10,
-                // height: 120,
-            }}>
-            <SectionContent>
-                <Text size="h3" fontWeight="bold">{props.eventTitle}</Text>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    marginTop: 3,
-                    color: isDarkmode ? themeColor.gray400 : themeColor.gray500, 
-                  }}
-                  italic="true">{props.eventType}</Text>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    marginTop: 3,
-                    // marginLeft: "auto",
-                    color: isDarkmode ? themeColor.gray400 : themeColor.gray500,                    
-                  }} italic="true">{timeLeft > 0 ? formatTimeLeft(timeLeft) : 'Event has ended'}</Text>
-            </SectionContent>
-        </View>
-    </TouchableOpacity>
+        <SectionContent>
+            <Text size="h3" fontWeight="bold">{props.eventTitle}</Text>
+            <Text
+              style={{
+                fontSize: 18,
+                marginTop: 3,
+                color: isDarkmode ? themeColor.gray400 : themeColor.gray500, 
+              }}
+              italic="true">{props.eventType}</Text>
+            <Text
+              style={{
+                fontSize: 18,
+                marginTop: 3,
+                // marginLeft: "auto",
+                color: isDarkmode ? themeColor.gray400 : themeColor.gray500,                    
+              }} italic="true">{timeLeft > 0 ? formatTimeLeft(timeLeft) : 'Event has ended'}</Text>
+        </SectionContent>
+      </TouchableHighlight>
+    </View>
   );
 };

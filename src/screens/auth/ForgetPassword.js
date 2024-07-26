@@ -91,6 +91,8 @@ export default function ({ navigation }) {
             />
             <Button
               text={loading ? "Loading" : "Send email"}
+              type="TouchableHighlight"
+              underlayColor={themeColor.primary600}
               onPress={() => {
                 forget();
               }}

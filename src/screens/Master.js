@@ -1,6 +1,6 @@
 import React from "react";
 import { getAuth, signOut } from "firebase/auth";
-import { View, Image, StyleSheet, ScrollView, Linking, TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, ScrollView, Linking, TouchableOpacity, TouchableHighlight } from 'react-native';
 import {
   Layout,
   Button,
@@ -21,10 +21,11 @@ export default function ({ navigation }) {
   return (
     <Layout>
 
-      <TouchableOpacity
+      <TouchableHighlight
         onPress={() => {
           navigation.navigate("NewEvent");
         }}
+        underlayColor={themeColor.primary600}
         style={{
           position: "absolute",
           right: 20,
@@ -46,7 +47,7 @@ export default function ({ navigation }) {
           color={themeColor.white}
           // color={themeColor.primary}
           size={60}/>
-      </TouchableOpacity>
+      </TouchableHighlight>
 
       <View
         style={{
