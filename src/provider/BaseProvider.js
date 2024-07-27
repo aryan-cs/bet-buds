@@ -12,6 +12,23 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const firestore = getFirestore(app);
 
+const saveNewEvent = async (admin, name, expiration, type, size) => {
+  try {
+    await setDoc(doc(firestore, "events", admin + expiration, "settings"), {
+      name: name,
+      expiration: expiration,
+      type: type,
+      size: size 
+    });
+    await setDoc(doc(firestore, "events", admin + expiration, "members"), {
+      admin: admin
+    });
+    console.log('Data written successfully');
+  } catch (error) {
+    console.error('Error writing data:', error);
+  }
+};
+
 // Function to write data to Firestore
 const writeData = async (collection, document, data) => {
   try {

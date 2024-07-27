@@ -19,14 +19,25 @@ import { writeData, readData, observeAuthState, testWriteData, testReadData } fr
 export default function ({ navigation }) {
   const { isDarkmode, setTheme } = useTheme();
   const [eventName, setEventName] = useState("");
-  const [eventDate, setEventDate] = useState();
-  const [eventTime, setEventTime] = useState();
-  const [eventEnd, setEventEnd] = useState(0);
+  const [eventDate, setEventDate] = useState(new Date());
+  const [eventTime, setEventTime] = useState(new Date());
+  const [eventEnd, setEventEnd] = useState(new Date());
   const [eventType, setEventType] = useState();
   const [eventSize, setEventSize] = useState();
 
   const handleWrite = async () => {
     console.log(eventName)
+    
+    d = eventDate.toISOString().substring(0, eventDate.toISOString().indexOf("T"))
+    t = eventTime.toISOString().substring(eventTime.toISOString().indexOf("T"))
+
+    console.log(d + t)
+    // for some reason, the date portion here is not working right. time is though...
+    setEventEnd(new Date(d + t))
+    console.log(eventEnd.getTime() / 1000)
+    // console.log(eventTime)
+    // setEventEnd()
+
     // await writeData("events", getAuth().currentUser.uid + Date.now(), ...
     // await writeData("events", "members", { admin: getAuth().currentUser.uid });
   };
@@ -34,6 +45,18 @@ export default function ({ navigation }) {
   const handleRead = async () => {
     const data = await readData(collection, document);
     setData(data);
+  };
+
+  const onDateChange = (event, selectedDate) => {
+    if (event.type == "set") {
+      setEventDate(selectedDate);
+    }
+  };
+
+  const onTimeChange = (event, selectedTime) => {
+    if (event.type == "set") {
+      setEventTime(selectedTime);
+    }
   };
   
   return (
@@ -78,8 +101,8 @@ export default function ({ navigation }) {
                   flexDirection: "row",
                   marginLeft: 'auto',
                 }}>
-                  <DateTimePicker mode="date" display="default" value={new Date()} themeVariant={isDarkmode ? "dark" : "light"} accentColor={themeColor.primary}/>
-                  <DateTimePicker mode="time" display="default" value={new Date()} themeVariant={isDarkmode ? "dark" : "light"} accentColor={themeColor.primary}/>
+                  <DateTimePicker mode="date" display="default" value={eventDate} onChange={onDateChange} themeVariant={isDarkmode ? "dark" : "light"} accentColor={themeColor.primary}/>
+                  <DateTimePicker mode="time" display="default" value={eventTime} onChange={onTimeChange} themeVariant={isDarkmode ? "dark" : "light"} accentColor={themeColor.primary}/>
                 </View>
           </View>
 
