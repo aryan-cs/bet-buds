@@ -17,26 +17,29 @@ import { writeData, readData, observeAuthState, testWriteData, testReadData } fr
 
 
 export default function ({ navigation }) {
+
+  const [currentDate, setCurrentDate] = useState(new Date())
   const { isDarkmode, setTheme } = useTheme();
   const [eventName, setEventName] = useState("");
-  const [eventDate, setEventDate] = useState(new Date());
-  const [eventTime, setEventTime] = useState(new Date());
-  const [eventEnd, setEventEnd] = useState(new Date());
+  const [uiDate, setUIDate] = useState(new Date());
+  const [uiTime, setUITime] = useState(new Date());
+  const [eventDate, setEventDate] = useState(currentDate.toISOString().substring(0, currentDate.toISOString().indexOf("T")));
+  const [eventTime, setEventTime] = useState(currentDate.toISOString().substring(currentDate.toISOString().indexOf("T")));
+  const [eventEnd, setEventEnd] = useState(Date.parse(eventDate + eventTime));
   const [eventType, setEventType] = useState();
   const [eventSize, setEventSize] = useState();
 
   const handleWrite = async () => {
     console.log(eventName)
     
-    d = eventDate.toISOString().substring(0, eventDate.toISOString().indexOf("T"))
-    t = eventTime.toISOString().substring(eventTime.toISOString().indexOf("T"))
+    console.log(eventDate + " " + eventTime)
+    setEventEnd(Date.parse(eventDate + eventTime))
+    console.log(eventEnd)
 
-    console.log(d + t)
-    // for some reason, the date portion here is not working right. time is though...
-    setEventEnd(new Date(d + t))
-    console.log(eventEnd.getTime() / 1000)
-    // console.log(eventTime)
-    // setEventEnd()
+
+
+
+
 
     // await writeData("events", getAuth().currentUser.uid + Date.now(), ...
     // await writeData("events", "members", { admin: getAuth().currentUser.uid });
@@ -49,13 +52,13 @@ export default function ({ navigation }) {
 
   const onDateChange = (event, selectedDate) => {
     if (event.type == "set") {
-      setEventDate(selectedDate);
+      setEventDate(selectedDate.toISOString().substring(0, selectedDate.toISOString().indexOf("T")));
     }
   };
 
   const onTimeChange = (event, selectedTime) => {
     if (event.type == "set") {
-      setEventTime(selectedTime);
+      setEventTime(selectedTime.toISOString().substring(selectedTime.toISOString().indexOf("T")));
     }
   };
   
@@ -101,8 +104,8 @@ export default function ({ navigation }) {
                   flexDirection: "row",
                   marginLeft: 'auto',
                 }}>
-                  <DateTimePicker mode="date" display="default" value={eventDate} onChange={onDateChange} themeVariant={isDarkmode ? "dark" : "light"} accentColor={themeColor.primary}/>
-                  <DateTimePicker mode="time" display="default" value={eventTime} onChange={onTimeChange} themeVariant={isDarkmode ? "dark" : "light"} accentColor={themeColor.primary}/>
+                  <DateTimePicker mode="date" display="default" value={uiDate} onChange={onDateChange} themeVariant={isDarkmode ? "dark" : "light"} accentColor={themeColor.primary}/>
+                  <DateTimePicker mode="time" display="default" value={uiTime} onChange={onTimeChange} themeVariant={isDarkmode ? "dark" : "light"} accentColor={themeColor.primary}/>
                 </View>
           </View>
 
