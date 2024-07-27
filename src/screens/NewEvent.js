@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, ScrollView, Alert,StyleSheet } from "react-native";
+import { View, ScrollView, Alert, StyleSheet } from "react-native";
 import {
   Layout,
   TopNav,
@@ -13,52 +13,50 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
 import BingoBoard from "../components/BingoBoard";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { writeData, readData, observeAuthState, testWriteData, testReadData } from '../provider/BaseProvider';
+import { saveNewEvent } from '../provider/BaseProvider';
 
 
 export default function ({ navigation }) {
 
-  const [currentDate, setCurrentDate] = useState(new Date())
   const { isDarkmode, setTheme } = useTheme();
   const [eventName, setEventName] = useState("");
-  const [uiDate, setUIDate] = useState(new Date());
-  const [uiTime, setUITime] = useState(new Date());
-  const [eventDate, setEventDate] = useState(currentDate.toISOString().substring(0, currentDate.toISOString().indexOf("T")));
-  const [eventTime, setEventTime] = useState(currentDate.toISOString().substring(currentDate.toISOString().indexOf("T")));
-  const [eventEnd, setEventEnd] = useState(Date.parse(eventDate + eventTime));
+  const [eventDate, setEventDate] = useState(new Date());
+  const [eventTime, setEventTime] = useState(new Date());
+  const [eventEnd, setEventEnd] = useState(new Date());
   const [eventType, setEventType] = useState();
   const [eventSize, setEventSize] = useState();
 
+  const missingInformation = (field, message) => Alert.alert(field + " Invalid", message, [{text: 'OK'}]);
+
   const handleWrite = async () => {
-    console.log(eventName)
     
-    console.log(eventDate + " " + eventTime)
-    setEventEnd(Date.parse(eventDate + eventTime))
-    console.log(eventEnd)
-
-
-
-
-
-
-    // await writeData("events", getAuth().currentUser.uid + Date.now(), ...
-    // await writeData("events", "members", { admin: getAuth().currentUser.uid });
-  };
-
-  const handleRead = async () => {
-    const data = await readData(collection, document);
-    setData(data);
+    if (!eventName.trim()) { missingInformation("Event Name", "Please enter a valid event name."); }
+    else if (Math.floor((Math.abs(Date.now() - eventEnd) / 1000) / 60) < 5) { missingInformation("Expiration", "The event must be at least 5 minutes long."); }
+    else if (!eventType) { missingInformation("Game Mode", "Please select a game mode."); }
+    else if (!eventSize) { missingInformation("Group Size", "Please select a group size."); }
+    else {
+      saveNewEvent(
+        getAuth().currentUser.uid,
+        eventName,
+        parseInt((eventEnd.getTime() / 1000).toFixed(0)),
+        eventType,
+        eventSize
+      )
+    }
   };
 
   const onDateChange = (event, selectedDate) => {
     if (event.type == "set") {
-      setEventDate(selectedDate.toISOString().substring(0, selectedDate.toISOString().indexOf("T")));
+      eventEnd.setFullYear(selectedDate.getFullYear());
+      eventEnd.setMonth(selectedDate.getMonth());
+      eventEnd.setDate(selectedDate.getDate());
     }
   };
 
   const onTimeChange = (event, selectedTime) => {
     if (event.type == "set") {
-      setEventTime(selectedTime.toISOString().substring(selectedTime.toISOString().indexOf("T")));
+      eventEnd.setHours(selectedTime.getHours());
+      eventEnd.setMinutes(selectedTime.getMinutes());
     }
   };
   
@@ -104,8 +102,8 @@ export default function ({ navigation }) {
                   flexDirection: "row",
                   marginLeft: 'auto',
                 }}>
-                  <DateTimePicker mode="date" display="default" value={uiDate} onChange={onDateChange} themeVariant={isDarkmode ? "dark" : "light"} accentColor={themeColor.primary}/>
-                  <DateTimePicker mode="time" display="default" value={uiTime} onChange={onTimeChange} themeVariant={isDarkmode ? "dark" : "light"} accentColor={themeColor.primary}/>
+                  <DateTimePicker mode="date" display="default" value={eventDate} onChange={onDateChange} themeVariant={isDarkmode ? "dark" : "light"} accentColor={themeColor.primary}/>
+                  <DateTimePicker mode="time" display="default" value={eventTime} onChange={onTimeChange} themeVariant={isDarkmode ? "dark" : "light"} accentColor={themeColor.primary}/>
                 </View>
           </View>
 
