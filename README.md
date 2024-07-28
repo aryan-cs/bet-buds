@@ -6,8 +6,6 @@ This app is inspired from the popular show Brooklyn Nine-Nine's which features a
 ## Authors
 
 - [@aryan-cs](https://www.github.com/aryan-cs)
-- [@SidD11111](https://github.com/sidd11111)
-
 
 ## Installation
 
