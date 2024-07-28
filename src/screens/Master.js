@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect }from "react";
 import { getAuth, signOut } from "firebase/auth";
 import { View, Image, StyleSheet, ScrollView, Linking, TouchableOpacity, TouchableHighlight } from 'react-native';
 import {
@@ -14,10 +14,33 @@ import {
 } from "react-native-rapi-ui";
 import EventEntry from "../components/EventEntry";
 import { Ionicons } from "@expo/vector-icons";
+import { loadEvents } from '../provider/BaseProvider';
 
 export default function ({ navigation }) {
   const { isDarkmode, setTheme } = useTheme();
   const auth = getAuth();
+
+  const [joinedEvents, setJoinedEvents] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const eventsData = await loadEvents(getAuth().currentUser.uid);
+        if (eventsData) {
+          setJoinedEvents(eventsData);
+        }
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    };
+  
+    fetchData(); // Call the fetchData function when the component mounts or updates
+  
+    // Cleanup function (optional) to handle unsubscriptions or resource cleanup
+    return () => {
+      // Cleanup logic here, if needed
+    };
+  }, []);
+
   return (
     <Layout>
 
@@ -104,13 +127,21 @@ export default function ({ navigation }) {
           alignContent: "center"
         }}>
 
-        <EventEntry eventTitle = "Camping Trip" eventType = "Bingo" eventEnd = {1731706636217}/>
+          {joinedEvents && (
+            <>
+              {joinedEvents.map(event => (
+                <EventEntry eventTitle = {event.title} eventType = {event.type} eventEnd = {event.expiration}/>
+              ))}
+            </>
+          )}
+
+        {/* <EventEntry eventTitle = "Camping Trip" eventType = "Bingo" eventEnd = {1731706636217}/>
         <EventEntry eventTitle = "Pickle Ball Tournament" eventType = "Classic" eventEnd = {1721736646217}/>
         <EventEntry eventTitle = "9/11 Hangout" eventType = "Classic" eventEnd = {1721706646317}/>
         <EventEntry eventTitle = "Zumba Class Dinner" eventType = "Classic" eventEnd = {1721703646217}/>
         <EventEntry eventTitle = "Thanksgiving Party" eventType = "Bingo" eventEnd = {1721706636217}/>
         <EventEntry eventTitle = "P. D. Dy Party" eventType = "Classic" eventEnd = {172136646217}/>
-        <EventEntry eventTitle = "Dhoti Function" eventType = "Bingo" eventEnd = {1721703646217}/>
+        <EventEntry eventTitle = "Dhoti Function" eventType = "Bingo" eventEnd = {1721703646217}/> */}
 
       </ScrollView>
     </Layout>
