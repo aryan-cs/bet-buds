@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ScrollView,
   TouchableOpacity,
   View,
   KeyboardAvoidingView,
   Image,
+  Modal,
+  ActivityIndicator,
+  StyleSheet,
 } from "react-native";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import {
@@ -15,6 +18,7 @@ import {
   useTheme,
   themeColor,
 } from "react-native-rapi-ui";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ({ navigation }) {
   const { isDarkmode, setTheme } = useTheme();
@@ -23,18 +27,43 @@ export default function ({ navigation }) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    const initializeApp = async () => {
+      // Check for saved theme and apply it
+      const savedTheme = await AsyncStorage.getItem('theme');
+      if (savedTheme) {
+        setTheme(savedTheme);
+      }
+
+      // Perform auto-login if credentials are saved
+      const storedEmail = await AsyncStorage.getItem('email');
+      const storedPassword = await AsyncStorage.getItem('password');
+      if (storedEmail && storedPassword) {
+        setLoading(true);
+        await signInWithEmailAndPassword(auth, storedEmail, storedPassword)
+          .catch(error => {
+            setLoading(false);
+            console.error("Auto login error:", error);
+          });
+        setLoading(false);
+      }
+    };
+
+    initializeApp();
+  }, []);
+
   async function login() {
     setLoading(true);
     await signInWithEmailAndPassword(auth, email, password).catch(function (
       error
     ) {
-      // Handle Errors here.
-      var errorCode = error.code;
       var errorMessage = error.message;
-      // ...
       setLoading(false);
       alert(errorMessage);
     });
+    await AsyncStorage.setItem('email', email);
+    await AsyncStorage.setItem('password', password);
+    setLoading(false);
   }
 
   return (
@@ -161,7 +190,39 @@ export default function ({ navigation }) {
             </View>
           </View>
         </ScrollView>
+
+        {loading && (
+          <Modal
+            transparent={true}
+            animationType="none"
+            visible={loading}
+            onRequestClose={() => {}}
+          >
+            <View style={styles.modalBackground}>
+              <View style={styles.activityIndicatorWrapper}>
+                <ActivityIndicator animating={loading} size="large" color={themeColor.primary} />
+              </View>
+            </View>
+          </Modal>
+        )}
       </Layout>
     </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  modalBackground: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  activityIndicatorWrapper: {
+    height: 100,
+    width: 100,
+    borderRadius: 10,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

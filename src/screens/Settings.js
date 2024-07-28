@@ -1,23 +1,40 @@
 import React from "react";
 import { getAuth, signOut } from "firebase/auth";
-import { View, Image, StyleSheet, ScrollView, Linking, TouchableOpacity } from 'react-native';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
 import {
   Layout,
   Button,
   Text,
-  TopNav,
-  Section,
-  SectionContent,
-  SectionImage,
   useTheme,
   themeColor,
 } from "react-native-rapi-ui";
-import EventEntry from "../components/EventEntry";
-import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ({ navigation }) {
   const { isDarkmode, setTheme } = useTheme();
   const auth = getAuth();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      await AsyncStorage.removeItem('email');
+      await AsyncStorage.removeItem('password');
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
+
+  const toggleTheme = async () => {
+    if (isDarkmode) {
+      setTheme("light");
+      await AsyncStorage.setItem('theme', 'light');
+    } else {
+      setTheme("dark");
+      await AsyncStorage.setItem('theme', 'dark');
+    }
+  };
+
   return (
     <Layout>
       <View
@@ -47,13 +64,7 @@ export default function ({ navigation }) {
           status={isDarkmode ? "black100" : "primary"}
           type="TouchableHighlight"
           underlayColor={isDarkmode ? themeColor.black200 : themeColor.primary600}
-          onPress={() => {
-            if (isDarkmode) {
-              setTheme("light");
-            } else {
-              setTheme("dark");
-            }
-          }}
+          onPress={toggleTheme}
           style={{
             marginTop: 10,
           }}
@@ -63,9 +74,7 @@ export default function ({ navigation }) {
           text="Logout"
           type="TouchableHighlight"
           underlayColor={themeColor.danger600}
-          onPress={() => {
-            signOut(auth);
-          }}
+          onPress={handleLogout}
           style={{
             marginTop: 10,
           }}
