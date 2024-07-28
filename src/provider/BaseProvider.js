@@ -14,14 +14,12 @@ const firestore = getFirestore(app);
 
 const saveNewEvent = async (admin, name, expiration, type, size) => {
   try {
-    await setDoc(doc(firestore, "events", (admin + expiration), "data", "settings"), {
+    await setDoc(doc(firestore, "events", (admin + expiration)), {
       name: name,
       expiration: expiration,
       type: type,
-      size: size 
-    });
-    await setDoc(doc(firestore, "events", (admin + expiration), "data", "members"), {
-      admin: admin
+      size: size,
+      admin: admin,
     });
 
     await updateDoc(doc(firestore, "users", admin), {
@@ -37,7 +35,7 @@ const saveNewEvent = async (admin, name, expiration, type, size) => {
   }
 };
 
-const loadEvents = async (admin) => {
+const loadUsersEvents = async (admin) => {
 
   try {
     const docRef = doc(firestore, "users", admin);
@@ -45,7 +43,24 @@ const loadEvents = async (admin) => {
     if (docSnap.exists()) {
       return docSnap.data();
     } else {
-      console.log('No data available');
+      console.log('No events.');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error reading data:', error);
+  }
+
+}
+
+const loadSpecificEvent = async (id) => {
+
+  try {
+    const docRef = doc(firestore, "events", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      console.log('Event not found.');
       return null;
     }
   } catch (error) {
@@ -90,5 +105,6 @@ const observeAuthState = (callback) => {
 // Export the functions
 export {
   saveNewEvent,
-  loadEvents
+  loadUsersEvents,
+  loadSpecificEvent
 };

@@ -42,6 +42,7 @@ export default function ({ navigation }) {
         eventType,
         eventSize
       )
+      navigation.goBack();
     }
   };
 
