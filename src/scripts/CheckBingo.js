@@ -10,9 +10,9 @@ const auth = getAuth(app);
 const firestore = getFirestore(app);
 
 //Load Data (should be a 2D Array)
-const board = async (id) => {
+const board = async (eventId, boardId) => {
     try {
-        const docRef = doc(firestore, "events", "boards", id);
+        const docRef = doc(firestore, "events", eventId, "boards", boardId);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
             return docSnap.data();

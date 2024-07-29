@@ -11,8 +11,9 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import ParlayEntry from "../components/ParlayEntry"
 
-export default function ({ navigation }) {
+export default function ({route, navigation}) {
   const { isDarkmode } = useTheme();
+  const {mode} = route.params;
   return (
     <Layout>
         <Text
@@ -30,13 +31,13 @@ export default function ({ navigation }) {
           alignContent: "center"
         }}>
         {/* these should be populated by score, like a leaderboard */}
-        <ParlayEntry parlayUser = "You" parlayProgress = {10} />
-        <ParlayEntry parlayUser = "Player 2" parlayProgress = {2} />
-        <ParlayEntry parlayUser = "Player 3" parlayProgress = {3} />
-        <ParlayEntry parlayUser = "Player 4" parlayProgress = {1} />
-        <ParlayEntry parlayUser = "Player 5" parlayProgress = {1} />
-        <ParlayEntry parlayUser = "Player 6" parlayProgress = {9} />
-        <ParlayEntry parlayUser = "Player 7" parlayProgress = {7} />
+        <ParlayEntry parlayUser = "You" parlayProgress = {10} mode = {mode}/>
+        <ParlayEntry parlayUser = "Player 2" parlayProgress = {2} mode = {mode}/>
+        <ParlayEntry parlayUser = "Player 3" parlayProgress = {3} mode = {mode}/>
+        <ParlayEntry parlayUser = "Player 4" parlayProgress = {1} mode = {mode}/>
+        <ParlayEntry parlayUser = "Player 5" parlayProgress = {1} mode = {mode}/>
+        <ParlayEntry parlayUser = "Player 6" parlayProgress = {9} mode = {mode}/>
+        <ParlayEntry parlayUser = "Player 7" parlayProgress = {7} mode = {mode}/>
       </ScrollView>
     </Layout>
   );
