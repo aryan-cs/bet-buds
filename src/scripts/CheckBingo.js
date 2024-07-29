@@ -1,3 +1,33 @@
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import getEnvVars from '../../config';
+
+const { firebaseConfig } = getEnvVars();
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const firestore = getFirestore(app);
+
+//Load Data (should be a 2D Array)
+const board = async (id) => {
+    try {
+        const docRef = doc(firestore, "events", "boards", id);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            return docSnap.data();
+        } 
+        else {
+            console.log('Event not found.');
+            return null;
+        }
+    } 
+
+    catch (error) {
+        console.error('Error reading data:', error);
+    }
+}
+
 //Checking Algorithm
 function checkBingo(board) {
     const size = 5;
@@ -49,7 +79,9 @@ function checkBingo(board) {
     return false;
 }
 
-checkBingo(board)
+var bingo = checkBingo(board);
+
+export default bingo;
 
 /*TEST----------------------------------------
 
