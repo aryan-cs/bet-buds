@@ -23,6 +23,7 @@ import { AuthContext } from "../provider/AuthProvider";
 import EventInfo from "../screens/EventInfo";
 import ParlayInfo from "../screens/ParlayInfo";
 import NewEvent from "../screens/NewEvent";
+import JoinEvent from "../screens/JoinEvent";
 import BingoSquareInfo from "../screens/BingoSquareInfo";
 import Settings from "../screens/Settings";
 import BingoBoardInfo from "../screens/BingoBoardInfo";
@@ -58,6 +59,7 @@ const Main = () => {
       <MainStack.Screen name="EventInfo" component={EventInfo} />
       <MainStack.Screen name="ParlayInfo" component={ParlayInfo} />
       <MainStack.Screen name="NewEvent" component={NewEvent} />
+      <MainStack.Screen name="JoinEvent" component={JoinEvent} />
       <MainStack.Screen name="BingoSquareInfo" component={BingoSquareInfo} />
       <MainStack.Screen name="BingoBoardInfo" component={BingoBoardInfo} />
       <MainStack.Screen name="Settings" component={Settings} />

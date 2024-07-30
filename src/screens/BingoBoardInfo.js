@@ -17,18 +17,18 @@ export default function ({ navigation, betName }) {
 
   return (
     <Layout>
-        <Text
-          size="h1"
-          fontWeight="bold"
-          style={{
-            marginLeft: 20,
-            marginBottom: -35,
-            marginTop: 40
-          }}>
-            Your Board
-        </Text>
+      <Text
+        size="h1"
+        fontWeight="bold"
+        style={{
+          marginLeft: 20,
+          marginBottom: -35,
+          marginTop: 40
+        }}>
+          Your Board
+      </Text>
 
-        <BingoBoard/>
+      <BingoBoard />
     </Layout>
   );
 }

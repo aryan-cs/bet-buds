@@ -77,6 +77,29 @@ export default function ({ navigation }) {
 
       <TouchableHighlight
         onPress={() => {
+          navigation.navigate("JoinEvent");
+        }}
+        underlayColor={themeColor.primary600}
+        style={{
+          position: "absolute",
+          right: 20,
+          bottom: 80,
+          zIndex: 1,
+          backgroundColor: themeColor.primary,
+          borderRadius: 100,
+          width: 50,
+          height: 50,
+          alignItems: "center",
+          justifyContent: "center"
+        }}>
+        <Ionicons
+          name={"search-outline"}
+          color={themeColor.white}
+          size={25} />
+      </TouchableHighlight>
+
+      <TouchableHighlight
+        onPress={() => {
           navigation.navigate("NewEvent");
         }}
         underlayColor={themeColor.primary600}
@@ -87,15 +110,15 @@ export default function ({ navigation }) {
           zIndex: 1,
           backgroundColor: themeColor.primary,
           borderRadius: 100,
-          width: 75,
-          height: 75,
+          width: 50,
+          height: 50,
           alignItems: "center",
           justifyContent: "center"
         }}>
         <Ionicons
           name={"add-outline"}
           color={themeColor.white}
-          size={60} />
+          size={30} />
       </TouchableHighlight>
 
       <View

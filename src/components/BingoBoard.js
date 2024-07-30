@@ -14,38 +14,41 @@ export default (props) => {
 
   const renderCell = (row, col) => (
     <View
-        key={`cell-${row}-${col}`}
-        style={{
-            width: 60,
-            height: 60,
-            margin: 4,
-            justifyContent: 'center',
-            alignItems: 'center',
-            paddingVertical: 10,
-            paddingHorizontal: 10,
-            borderWidth: 1,
-            borderRadius: 8,
-            fontFamily: "Ubuntu_400Regular",
-            backgroundColor: isDarkmode ? "#1f1f1f" : themeColor.white,
-            borderColor: isDarkmode ?  "#333333" : "#d8d8d8",
-            // backgroundColor: themeColor.primary,
-            // borderColor: themeColor.primary200,
-            onFocusborderColor: isDarkmode ? "#7f7f7f" : "#c0c0c0",
-            placeholderTextColor: isDarkmode ? "#575757" : themeColor.gray300,
-        }}>
+      key={`cell-${row}-${col}`}
+      style={{
+          width: 60,
+          height: 60,
+          margin: 4,
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderWidth: 2,
+          borderRadius: 8,
+          fontFamily: "Ubuntu_400Regular",
+          backgroundColor: isDarkmode ? "#1f1f1f" : themeColor.white,
+          borderColor: isDarkmode ?  "#333333" : "#d8d8d8",
+          onFocusborderColor: isDarkmode ? "#7f7f7f" : "#c0c0c0",
+          placeholderTextColor: isDarkmode ? "#575757" : themeColor.gray300,
+      }}>
         <TouchableOpacity
-            onPress={() => {
+          onPress={() => {
+            if (!(row === 2 && col === 2)) {
               navigation.navigate("BingoSquareInfo");
-            }}
-            style={{
-              marginVertical: 'auto',
-            }}>
-            <Text style={{
+            }
+          }}
+          style={{
+            marginVertical: 'auto',
+            width: "100%",
+            height: "100%",
+            justifyContent: "center",
+          }}>
+            <Text
+              style={{
                 textAlign: "center",
                 textAlignVertical: "center",
-                fontSize: 30,
+                fontWeight: "bold",
+                fontSize: (row === 2 && col === 2) ? 20 : (props.completed ? 30 : 0),
                 color: themeColor.primary
-            }}>●</Text>
+            }}>{(row === 2 && col === 2) ? "FREE" : (props.completed ? "●" : "")}</Text>
         </TouchableOpacity>
     </View>
   );
@@ -75,28 +78,6 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
   },
-//   cell: {
-//     width: 60,
-//     height: 60,
-//     margin: 4,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     backgroundColor: '#fff',
-//     borderColor: '#000',
-//     borderWidth: 1,
-//     borderRadius: 5,
-//     fontSize: 14,
-//     paddingVertical: 10,
-//     paddingHorizontal: 10,
-//     borderWidth: 1,
-//     borderRadius: 8,
-//     fontFamily: "Ubuntu_400Regular",
-//     backgroundColor: isDarkmode ? "#1f1f1f" : themeColor.white,
-//     borderColor: isDarkmode ?  "#333333" : "#d8d8d8",
-//     color: isDarkmode ? "#dddddd" : "#989898",
-//     onFocusborderColor: isDarkmode ? "#7f7f7f" : "#c0c0c0",
-//     placeholderTextColor: isDarkmode ? "#575757" : themeColor.gray300,
-//   },
   cellText: {
     fontSize: 16,
   },

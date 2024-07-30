@@ -9,58 +9,10 @@ import {
   Button,
   TextInput
 } from "react-native-rapi-ui";
-import DateTimePicker from '@react-native-community/datetimepicker';
-import RNPickerSelect from 'react-native-picker-select';
-import BingoBoard from "../components/BingoBoard";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { saveNewEvent } from '../provider/BaseProvider';
-
-// https://reactnavigation.org/docs/tab-view/
 
 export default function ({ navigation }) {
 
   const { isDarkmode, setTheme } = useTheme();
-  const [eventName, setEventName] = useState("");
-  const [eventDate, setEventDate] = useState(new Date());
-  const [eventTime, setEventTime] = useState(new Date());
-  const [eventEnd, setEventEnd] = useState(new Date());
-  const [eventType, setEventType] = useState();
-  const [eventSize, setEventSize] = useState();
-
-  const missingInformation = (field, message) => Alert.alert(field + " Invalid", message, [{text: 'OK'}]);
-
-  const handleWrite = async () => {
-    
-    if (!eventName.trim()) { missingInformation("Event Name", "Please enter a valid event name."); }
-    else if (Math.floor((Math.abs(Date.now() - eventEnd) / 1000) / 60) < 5) { missingInformation("Expiration", "The event must be at least 5 minutes long."); }
-    else if (!eventType) { missingInformation("Game Mode", "Please select a game mode."); }
-    else if (!eventSize) { missingInformation("Group Size", "Please select a group size."); }
-    else {
-      saveNewEvent(
-        getAuth().currentUser.uid,
-        eventName,
-        parseInt((eventEnd.getTime() / 1000).toFixed(0)),
-        eventType,
-        eventSize
-      )
-      navigation.goBack();
-    }
-  };
-
-  const onDateChange = (event, selectedDate) => {
-    if (event.type == "set") {
-      eventEnd.setFullYear(selectedDate.getFullYear());
-      eventEnd.setMonth(selectedDate.getMonth());
-      eventEnd.setDate(selectedDate.getDate());
-    }
-  };
-
-  const onTimeChange = (event, selectedTime) => {
-    if (event.type == "set") {
-      eventEnd.setHours(selectedTime.getHours());
-      eventEnd.setMinutes(selectedTime.getMinutes());
-    }
-  };
   
   return (
     <Layout>
@@ -71,7 +23,7 @@ export default function ({ navigation }) {
             marginLeft: 20,
             marginBottom: 5,
           }}>
-            Create event
+            Join event
         </Text>
         
       <ScrollView
@@ -83,7 +35,7 @@ export default function ({ navigation }) {
 
         }}>
 
-          <Text style={{ marginTop: 15 }} fontWeight="bold">Event Name</Text>
+          {/* <Text style={{ marginTop: 15 }} fontWeight="bold">Event Name</Text>
           <TextInput
             containerStyle={{ marginTop: 10, paddingHorizontal: 10 }}
             placeholder="Enter the name of the event"
@@ -237,10 +189,9 @@ export default function ({ navigation }) {
                   marginTop: "auto",
                   marginBottom: 30,                  
                 }}
-              />
+              /> */}
 
       </ScrollView>
-    {/* <BingoBoard/> */}
   </Layout>
   );
 }

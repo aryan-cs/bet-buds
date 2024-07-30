@@ -11,7 +11,6 @@ import {
     themeColor,
     useTheme,
   } from "react-native-rapi-ui";
-import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/core';
 
 export default (props) => {
@@ -25,7 +24,6 @@ export default (props) => {
           marginVertical: 10,
           backgroundColor: isDarkmode ? themeColor.black200 : themeColor.white100,
           borderRadius: 10,
-          // height: 120,
       }}>
         <TouchableHighlight
           underlayColor={isDarkmode ? themeColor.black300 : themeColor.white200}
@@ -39,8 +37,7 @@ export default (props) => {
           <SectionContent
             style={{
               display: "flex",
-              flexDirection: "row",
-              
+              flexDirection: "row", 
             }}>
               <Text
                 size="h3"
