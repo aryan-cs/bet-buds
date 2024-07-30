@@ -31,7 +31,7 @@ export default (props) => {
           underlayColor={isDarkmode ? themeColor.black300 : themeColor.white200}
           style={{borderRadius: 10}}
           onPress={() => {
-              // navigation.navigate("ParlayInfo");
+              navigation.navigate("ParlayInfo");
           }}>
           <SectionContent
             style={{

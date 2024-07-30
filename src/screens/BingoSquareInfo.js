@@ -10,7 +10,6 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from 'expo-linear-gradient';
 
-
 export default function ({ navigation, betName }) {
   const { isDarkmode } = useTheme();
 
@@ -26,7 +25,7 @@ export default function ({ navigation, betName }) {
           fontSize: 50,
           marginTop: 100,
         }}>
-          Sid doesn't get freaky
+          Sid doesn't get freaky bingo
       </Text>
 
       <Text
@@ -79,7 +78,6 @@ export default function ({ navigation, betName }) {
               marginBottom: 150
             }}
           />
-
     </Layout>
   );
 }
