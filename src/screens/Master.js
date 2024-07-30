@@ -19,8 +19,7 @@ export default function ({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const [eventsList, setEventsList] = useState([]);
 
-  const loadData = async () => {
-    setRefreshing(true);
+  const DBConnect = async () => {
     try {
       const eventsData = await loadUsersEvents(getAuth().currentUser.uid);
       if (eventsData) {
@@ -51,6 +50,11 @@ export default function ({ navigation }) {
     } catch (error) {
       console.error('Error fetching events:', error);
     }
+  }
+
+  const loadData = async () => {
+    setRefreshing(true);
+    DBConnect();
     setRefreshing(false);
   };
 
@@ -61,10 +65,9 @@ export default function ({ navigation }) {
 
   useFocusEffect(
     useCallback(() => {
-      const timer = setTimeout(() => {
-        loadData();
+      const timer = setTimeout(async () => {
+        DBConnect();
       }, 1000);
-
       return () => clearTimeout(timer);
     }, [])
   );

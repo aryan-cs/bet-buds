@@ -23,15 +23,15 @@ export default (props) => {
       style={{
           marginHorizontal: 20,
           marginVertical: 10,
-          backgroundColor: isDarkmode ? themeColor.black100 : themeColor.white100,
+          backgroundColor: isDarkmode ? themeColor.black200 : themeColor.white100,
           borderRadius: 10,
           // height: 120,
       }}>
         <TouchableHighlight
-          underlayColor={isDarkmode ? themeColor.black200 : themeColor.white200}
+          underlayColor={isDarkmode ? themeColor.black300 : themeColor.white200}
           style={{borderRadius: 10}}
           onPress={() => {
-              navigation.navigate("ParlayInfo");
+              // navigation.navigate("ParlayInfo");
           }}>
           <SectionContent
             style={{

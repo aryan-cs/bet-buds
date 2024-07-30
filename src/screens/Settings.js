@@ -1,6 +1,6 @@
 import React from "react";
 import { getAuth, signOut } from "firebase/auth";
-import { View, ScrollView, TouchableOpacity } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import {
   Layout,
   Button,
@@ -22,16 +22,6 @@ export default function ({ navigation }) {
       navigation.navigate('Login');
     } catch (error) {
       console.error("Error logging out:", error);
-    }
-  };
-
-  const toggleTheme = async () => {
-    if (isDarkmode) {
-      setTheme("light");
-      await AsyncStorage.setItem('theme', 'light');
-    } else {
-      setTheme("dark");
-      await AsyncStorage.setItem('theme', 'dark');
     }
   };
 
@@ -64,7 +54,11 @@ export default function ({ navigation }) {
           status={isDarkmode ? "black100" : "primary"}
           type="TouchableHighlight"
           underlayColor={isDarkmode ? themeColor.black200 : themeColor.primary600}
-          onPress={toggleTheme}
+          onPress={async () => {
+            const newTheme = isDarkmode ? "light" : "dark";
+            setTheme(newTheme);
+            await AsyncStorage.setItem('theme', newTheme);
+          }}
           style={{
             marginTop: 10,
           }}

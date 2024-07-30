@@ -38,8 +38,7 @@ const Auth = () => {
     <AuthStack.Navigator
       screenOptions={{
         headerShown: false,
-      }}
-    >
+      }}>
       <AuthStack.Screen name="Login" component={Login} />
       <AuthStack.Screen name="Register" component={Register} />
       <AuthStack.Screen name="ForgetPassword" component={ForgetPassword} />
@@ -53,8 +52,7 @@ const Main = () => {
     <MainStack.Navigator
       screenOptions={{
         headerShown: false,
-      }}
-    >
+      }}>
       <MainStack.Screen name="MainTabs" component={MainTabs} />
       <MainStack.Screen name="EventInfo" component={EventInfo} />
       <MainStack.Screen name="ParlayInfo" component={ParlayInfo} />

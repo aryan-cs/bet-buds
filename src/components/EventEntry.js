@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/core';
 export default (props) => {
   const { isDarkmode } = useTheme();
   const navigation = useNavigation();
+  const [data, setData] = useState(props);
 
   const calculateTimeLeft = () => {
     return props.eventEnd * 1000 - Date.now();
@@ -39,11 +40,11 @@ export default (props) => {
       style={{
         marginHorizontal: 20,
         marginVertical: 10,
-        backgroundColor: isDarkmode ? themeColor.black100 : themeColor.white100,
+        backgroundColor: isDarkmode ? themeColor.black200 : themeColor.white100,
         borderRadius: 10,
       }}>
       <TouchableHighlight
-        underlayColor={isDarkmode ? themeColor.black200 : themeColor.white200}
+        underlayColor={isDarkmode ? themeColor.black300 : themeColor.white200}
         style={{ borderRadius: 10 }}
         onPress={() => {
           navigation.navigate("EventInfo");
