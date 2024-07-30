@@ -26,7 +26,7 @@ export default function ({ navigation }) {
           fontSize: 50,
           marginTop: 100,
         }}>
-          Sid doesn't get freaky
+          Some bet here
       </Text>
 
       <Text

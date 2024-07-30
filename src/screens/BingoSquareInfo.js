@@ -25,7 +25,7 @@ export default function ({ navigation, betName }) {
           fontSize: 50,
           marginTop: 100,
         }}>
-          Sid doesn't get freaky bingo
+          Some bet here
       </Text>
 
       <Text
