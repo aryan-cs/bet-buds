@@ -46,7 +46,9 @@ export default (props) => {
         underlayColor={isDarkmode ? themeColor.black200 : themeColor.white200}
         style={{ borderRadius: 10 }}
         onPress={() => {
-          navigation.navigate("EventInfo");
+          navigation.navigate("EventInfo", {
+            mode: props.eventType
+          });
         }}>
         <SectionContent>
           <Text size="h3" fontWeight="bold">{props.eventTitle}</Text>
