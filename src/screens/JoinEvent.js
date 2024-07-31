@@ -13,6 +13,17 @@ import {
 export default function ({ navigation }) {
 
   const { isDarkmode, setTheme } = useTheme();
+  const [joinCode, setJoinCode] = useState("");
+
+  const notFound = () => { return Alert.alert("Event Not Found", "Please enter a valid event code.", [{text: 'OK'}]); }
+
+  const joinEvent = async () => {
+    
+    if (!joinCode.trim()) { notFound() }
+    else {
+      // search for event in db and join if found otherwise notFound()
+    }
+  };
   
   return (
     <Layout>
@@ -21,7 +32,6 @@ export default function ({ navigation }) {
           fontWeight="bold"
           style={{
             marginLeft: 20,
-            marginBottom: 5,
           }}>
             Join event
         </Text>
@@ -34,6 +44,24 @@ export default function ({ navigation }) {
           paddingHorizontal: 20,
 
         }}>
+          <TextInput
+            containerStyle={{ marginTop: "auto", paddingHorizontal: 10, marginHorizontal: 30 }}
+            placeholder="XXXXXX"
+            textAlign="center"
+            fontSize={50}
+            onChangeText={(code) => setJoinCode(code)}
+          />
+          <Button
+            text="Join Event"
+            onPress={joinEvent}
+            type="TouchableHighlight"
+            underlayColor={themeColor.primary600}
+            style={{
+              marginTop: 10,
+              marginBottom: "auto",
+              marginHorizontal: 60                
+            }}
+          />
 
           {/* <Text style={{ marginTop: 15 }} fontWeight="bold">Event Name</Text>
           <TextInput
