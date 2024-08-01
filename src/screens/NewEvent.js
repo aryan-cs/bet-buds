@@ -14,6 +14,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import BingoBoard from "../components/BingoBoard";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { saveNewEvent } from '../provider/BaseProvider';
+import { generateCode } from "../scripts/GenerateJoinCode";
 
 // https://reactnavigation.org/docs/tab-view/
 
@@ -43,6 +44,7 @@ export default function ({ navigation }) {
         eventType,
         eventSize
       )
+      generateCode()
       navigation.goBack();
     }
   };
