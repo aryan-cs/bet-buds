@@ -1,7 +1,7 @@
 // BaseProvider.js
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, collection, getCountFromServer } from 'firebase/firestore';
 import getEnvVars from '../../config';
 
 // Get Firebase configuration based on environment
@@ -12,21 +12,22 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const firestore = getFirestore(app);
 
-const saveNewEvent = async (admin, name, expiration, type, size) => {
+const saveNewEvent = async (admin, name, expiration, type, size, code) => {
   try {
-    await setDoc(doc(firestore, "events", (admin + expiration)), {
+    await setDoc(doc(firestore, "events", (code)), {
       name: name,
       expiration: expiration,
       type: type,
       size: size,
       admin: admin,
+      code: code
     });
 
     await updateDoc(doc(firestore, "users", admin), {
-      currentEvents: arrayUnion(admin + expiration)
+      currentEvents: arrayUnion(code)
     }).catch((error) => {
       setDoc(doc(firestore, "users", admin), {
-        currentEvents: arrayUnion(admin + expiration)
+        currentEvents: arrayUnion(code)
       })
     })
     console.log('Data written successfully');
@@ -69,6 +70,18 @@ const loadSpecificEvent = async (id) => {
 
 }
 
+const getNumEvents = async () => {
+
+  try {
+    const collectionRef = collection(firestore, "events");
+    const snapshot = await getCountFromServer(collectionRef);
+    var count = snapshot.data().count;
+    return parseInt(count);
+  } catch (error) {
+    console.error('Error reading data:', error);
+  }
+
+}
 // // Function to write data to Firestore
 // const writeData = async (collection, document, data) => {
 //   try {
@@ -106,5 +119,6 @@ const observeAuthState = (callback) => {
 export {
   saveNewEvent,
   loadUsersEvents,
-  loadSpecificEvent
+  loadSpecificEvent,
+  getNumEvents
 };
