@@ -83,18 +83,6 @@ const getNumEvents = async () => {
 
 }
 
-const getNumEvents = async () => {
-
-  try {
-    const collectionRef = collection(firestore, "events");
-    const snapshot = await getCountFromServer(collectionRef);
-    var count = snapshot.data().count;
-    return parseInt(count);
-  } catch (error) {
-    console.error('Error reading data:', error);
-  }
-
-}
 // // Function to write data to Firestore
 // const writeData = async (collection, document, data) => {
 //   try {
