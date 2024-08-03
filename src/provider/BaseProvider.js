@@ -1,7 +1,7 @@
 // BaseProvider.js
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc, addDoc, updateDoc, arrayUnion, collection } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, collection, getCountFromServer } from 'firebase/firestore';
 import getEnvVars from '../../config';
 
 // Get Firebase configuration based on environment
@@ -12,30 +12,26 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const firestore = getFirestore(app);
 
-const saveNewEvent = async (admin, name, expiration, type, size) => {
+const saveNewEvent = async (admin, name, expiration, type, size, code) => {
   try {
-    // Reference to the "events" collection
-    const eventsCollectionRef = collection(firestore, "events");
-    // Add a new document with an auto-generated ID
-    const eventDocRef = await addDoc(eventsCollectionRef, {
+    await setDoc(doc(firestore, "events", (code)), {
       name: name,
       expiration: expiration,
       type: type,
       size: size,
       admin: admin,
+      code: code
     });
     const eventID = eventDocRef.id;
 
     // Update the user's document with the new event ID
     await updateDoc(doc(firestore, "users", admin), {
-      currentEvents: arrayUnion(eventID)
-    }).catch(async (error) => {
-      // Handle the case where the user document does not exist
-      await setDoc(doc(firestore, "users", admin), {
-        currentEvents: arrayUnion(eventID)
-      });
-    });
-
+      currentEvents: arrayUnion(code)
+    }).catch((error) => {
+      setDoc(doc(firestore, "users", admin), {
+        currentEvents: arrayUnion(code)
+      })
+    })
     console.log('Data written successfully');
   } catch (error) {
     console.error('Error writing data:', error);
@@ -74,6 +70,31 @@ const loadSpecificEvent = async (id) => {
   }
 };
 
+const getNumEvents = async () => {
+
+  try {
+    const collectionRef = collection(firestore, "events");
+    const snapshot = await getCountFromServer(collectionRef);
+    var count = snapshot.data().count;
+    return parseInt(count);
+  } catch (error) {
+    console.error('Error reading data:', error);
+  }
+
+}
+
+const getNumEvents = async () => {
+
+  try {
+    const collectionRef = collection(firestore, "events");
+    const snapshot = await getCountFromServer(collectionRef);
+    var count = snapshot.data().count;
+    return parseInt(count);
+  } catch (error) {
+    console.error('Error reading data:', error);
+  }
+
+}
 // // Function to write data to Firestore
 // const writeData = async (collection, document, data) => {
 //   try {
@@ -111,5 +132,6 @@ const observeAuthState = (callback) => {
 export {
   saveNewEvent,
   loadUsersEvents,
-  loadSpecificEvent
+  loadSpecificEvent,
+  getNumEvents
 };
