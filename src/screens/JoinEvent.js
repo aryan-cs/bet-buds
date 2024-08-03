@@ -45,10 +45,10 @@ export default function ({ navigation }) {
 
         }}>
           <TextInput
-            containerStyle={{ marginTop: "auto", paddingHorizontal: 10, marginHorizontal: 30 }}
-            placeholder="XXXXXX"
+            containerStyle={{ marginTop: "auto", paddingHorizontal: 10, marginHorizontal: 30, paddingVertical: 15 }}
+            placeholder="XXXXXXXXXXXXXXXXXXXX"
             textAlign="center"
-            fontSize={50}
+            fontSize={25}
             onChangeText={(code) => setJoinCode(code)}
           />
           <Button
@@ -57,9 +57,10 @@ export default function ({ navigation }) {
             type="TouchableHighlight"
             underlayColor={themeColor.primary600}
             style={{
-              marginTop: 10,
+              marginTop: 20,
               marginBottom: "auto",
-              marginHorizontal: 60                
+              marginHorizontal: 100,
+              paddingVertical: 15,             
             }}
           />
 

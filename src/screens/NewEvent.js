@@ -41,7 +41,7 @@ export default function ({ navigation }) {
         eventName,
         parseInt((eventEnd.getTime() / 1000).toFixed(0)),
         eventType,
-        eventSize
+        eventSize,
       )
       navigation.goBack();
     }

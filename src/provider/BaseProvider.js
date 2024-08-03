@@ -1,7 +1,7 @@
 // BaseProvider.js
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDoc, addDoc, updateDoc, arrayUnion, collection } from 'firebase/firestore';
 import getEnvVars from '../../config';
 
 // Get Firebase configuration based on environment
@@ -14,21 +14,28 @@ const firestore = getFirestore(app);
 
 const saveNewEvent = async (admin, name, expiration, type, size) => {
   try {
-    await setDoc(doc(firestore, "events", (admin + expiration)), {
+    // Reference to the "events" collection
+    const eventsCollectionRef = collection(firestore, "events");
+    // Add a new document with an auto-generated ID
+    const eventDocRef = await addDoc(eventsCollectionRef, {
       name: name,
       expiration: expiration,
       type: type,
       size: size,
       admin: admin,
     });
+    const eventID = eventDocRef.id;
 
+    // Update the user's document with the new event ID
     await updateDoc(doc(firestore, "users", admin), {
-      currentEvents: arrayUnion(admin + expiration)
-    }).catch((error) => {
-      setDoc(doc(firestore, "users", admin), {
-        currentEvents: arrayUnion(admin + expiration)
-      })
-    })
+      currentEvents: arrayUnion(eventID)
+    }).catch(async (error) => {
+      // Handle the case where the user document does not exist
+      await setDoc(doc(firestore, "users", admin), {
+        currentEvents: arrayUnion(eventID)
+      });
+    });
+
     console.log('Data written successfully');
   } catch (error) {
     console.error('Error writing data:', error);
@@ -36,24 +43,22 @@ const saveNewEvent = async (admin, name, expiration, type, size) => {
 };
 
 const loadUsersEvents = async (admin) => {
-
   try {
     const docRef = doc(firestore, "users", admin);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      return docSnap.data();
+      return docSnap.data().currentEvents || []; // Return the list of event IDs or an empty array
     } else {
       console.log('No events.');
-      return null;
+      return [];
     }
   } catch (error) {
     console.error('Error reading data:', error);
+    return [];
   }
-
-}
+};
 
 const loadSpecificEvent = async (id) => {
-
   try {
     const docRef = doc(firestore, "events", id);
     const docSnap = await getDoc(docRef);
@@ -65,9 +70,9 @@ const loadSpecificEvent = async (id) => {
     }
   } catch (error) {
     console.error('Error reading data:', error);
+    return null;
   }
-
-}
+};
 
 // // Function to write data to Firestore
 // const writeData = async (collection, document, data) => {
