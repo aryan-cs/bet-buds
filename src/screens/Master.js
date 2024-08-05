@@ -27,14 +27,14 @@ export default function ({ navigation }) {
         for (let entry = 0; entry < eventsData.length; entry++) {
           const item = await loadSpecificEvent(eventsData[entry]);
           stack.push({
-            component: <EventEntry eventTitle={item.name} eventType={item.type} eventEnd={item.expiration} key={item.expiration} />,
+            component: <EventEntry eventTitle={item.name} eventType={item.type} eventEnd={item.expiration} key={eventsData[entry]} />,
             expiration: item.expiration
           });
         }
         stack.sort((a, b) => a.expiration - b.expiration);
         const sortedComponents = stack.map(event => event.component);
         setEventsList(sortedComponents);
-      } else if (eventsData == null) {
+      } else if (eventsData == null || eventsData.length < 1) {
         setEventsList(
           <Text
             size="h4"

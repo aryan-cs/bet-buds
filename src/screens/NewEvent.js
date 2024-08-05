@@ -13,7 +13,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import RNPickerSelect from 'react-native-picker-select';
 import BingoBoard from "../components/BingoBoard";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { getNumEvents, saveNewEvent } from '../provider/BaseProvider';
+import { getNumEvents, saveNewEvent, incrementNumEvents } from '../provider/BaseProvider';
 import { generateCode } from "../scripts/GenerateJoinCode";
 
 // https://reactnavigation.org/docs/tab-view/
@@ -38,6 +38,7 @@ export default function ({ navigation }) {
     else if (!eventSize) { missingInformation("Group Size", "Please select a group size."); }
     else {
       var numEvents = await getNumEvents();
+      await incrementNumEvents();
       const joinCode = generateCode(numEvents);
       // console.log(joinCode);
       saveNewEvent(

@@ -3,6 +3,8 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, collection, getCountFromServer } from 'firebase/firestore';
 import getEnvVars from '../../config';
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import { generateCode } from "../scripts/GenerateJoinCode"
 
 // Get Firebase configuration based on environment
 const { firebaseConfig } = getEnvVars();
@@ -20,11 +22,9 @@ const saveNewEvent = async (admin, name, expiration, type, size, code) => {
       type: type,
       size: size,
       admin: admin,
-      code: code
+      members: []
     });
-    const eventID = eventDocRef.id;
 
-    // Update the user's document with the new event ID
     await updateDoc(doc(firestore, "users", admin), {
       currentEvents: arrayUnion(code)
     }).catch((error) => {
@@ -71,16 +71,66 @@ const loadSpecificEvent = async (id) => {
 };
 
 const getNumEvents = async () => {
-
   try {
-    const collectionRef = collection(firestore, "events");
-    const snapshot = await getCountFromServer(collectionRef);
-    var count = snapshot.data().count;
-    return parseInt(count);
+    const docRef = doc(firestore, "events", "info");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data().eventsCreated;
+    } else {
+      console.log('Event history data not found');
+      return null;
+    }
   } catch (error) {
     console.error('Error reading data:', error);
+    return null;
   }
+}
 
+const incrementNumEvents = async () => {
+  try {
+    const docRef = doc(firestore, "events", "info");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      count =  parseInt(docSnap.data().eventsCreated) + 1;
+      await setDoc(doc(firestore, "events", "info"), {
+        eventsCreated: count
+      }); 
+    } else {
+      console.log('Event history data not found');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error reading data:', error);
+    return null;
+  }
+}
+
+
+async function addNewMember(eventID, memberID) {
+  console.log(eventID)
+  try {
+    const docRef = doc(firestore, "events", eventID.toUpperCase());
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      await updateDoc(doc(firestore, "events", eventID), {
+        members: arrayUnion(memberID)
+      }).then(
+        await updateDoc(doc(firestore, "users", memberID), {
+          currentEvents: arrayUnion(eventID)
+        }).catch((error) => {
+          setDoc(doc(firestore, "users", memberID), {
+            currentEvents: arrayUnion(eventID)
+          });
+        }),
+        console.log('Data written successfully'));
+    } else {
+      console.log('Unable to add user to event.');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error reading data:', error);
+    return null;
+  }
 }
 
 // // Function to write data to Firestore
@@ -121,5 +171,7 @@ export {
   saveNewEvent,
   loadUsersEvents,
   loadSpecificEvent,
-  getNumEvents
+  getNumEvents,
+  incrementNumEvents,
+  addNewMember
 };
