@@ -1,6 +1,6 @@
 # Called It | A friend group betting app
 
-This app is inspired from the popular show Brooklyn Nine-Nine's which features a game called Boyle Bingo.
+This app is inspired from the popular show Brooklyn Nine-Nine, which features a game called Boyle Bingo.
 
 
 ## Authors
