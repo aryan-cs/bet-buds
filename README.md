@@ -1,4 +1,4 @@
-# Called It | A friend group betting app
+# bet buds | A friend group betting app
 
 This app is inspired from the popular show Brooklyn Nine-Nine, which features a game called Boyle Bingo.
 
