@@ -17,16 +17,19 @@ import { addNewMember } from '../provider/BaseProvider';
 
 export default function ({ navigation }) {
 
-  const auth = getAuth();
   const { isDarkmode, setTheme } = useTheme();
   const joinCode = useRef("");
   const [fieldValue, setFieldValue] = useState();
+  const [name, setName] = useState();
 
   const notFound = () => { return Alert.alert("Event Not Found", "Please enter a valid event code.", [{text: 'OK'}]); }
 
   const joinEvent = async () => {
     if (!joinCode.current.trim()) { notFound(); }
-    else { await addNewMember(joinCode.current, getAuth().currentUser.uid); navigation.goBack(); }
+    else {
+      await addNewMember(joinCode.current, getAuth().currentUser.uid);
+      navigation.goBack();
+    }
   };
   
   return (

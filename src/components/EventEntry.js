@@ -11,7 +11,6 @@ import { useNavigation } from '@react-navigation/core';
 export default (props) => {
   const { isDarkmode } = useTheme();
   const navigation = useNavigation();
-  const [data, setData] = useState(props);
 
   const calculateTimeLeft = () => {
     return props.eventEnd * 1000 - Date.now();
@@ -48,7 +47,7 @@ export default (props) => {
         style={{ borderRadius: 10 }}
         onPress={() => {
           navigation.navigate("EventInfo", {
-            mode: props.eventType
+            data: props
           });
         }}>
         <SectionContent>

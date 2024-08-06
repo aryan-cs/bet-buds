@@ -133,33 +133,36 @@ async function addNewMember(eventID, memberID) {
   }
 }
 
-// // Function to write data to Firestore
-// const writeData = async (collection, document, data) => {
-//   try {
-//     await setDoc(doc(firestore, collection, document), data);
-//     console.log('Data written successfully');
-//   } catch (error) {
-//     console.error('Error writing data:', error);
-//   }
-// };
+const getDisplayName = async (admin) => {
+  try {
+    const docRef = doc(firestore, "users", admin);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data().displayName;
+    } else {
+      console.log('No display name saved.');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error reading data:', error);
+    return null;
+  }
+};
 
-// // Function to read data from Firestore
-// const readData = async (collection, document) => {
-  // try {
-  //   const docRef = doc(firestore, collection, document);
-  //   const docSnap = await getDoc(docRef);
-  //   if (docSnap.exists()) {
-  //     return docSnap.data();
-  //   } else {
-  //     console.log('No data available');
-  //     return null;
-  //   }
-  // } catch (error) {
-  //   console.error('Error reading data:', error);
-  // }
-// };
+const saveDisplayName = async (userId, displayName) => {
+  try {
+    const userRef = doc(firestore, "users", userId);
+    const docSnap = await getDoc(userRef);
 
-// Example usage of auth state observer
+    if (docSnap.exists()) { await updateDoc(userRef, { displayName: displayName }); }
+    else { await setDoc(userRef, { displayName: displayName });
+    }
+    console.log("Display name saved successfully.");
+  } catch (error) {
+    console.error("Error saving display name:", error);
+  }
+};
+
 const observeAuthState = (callback) => {
   auth.onAuthStateChanged(user => {
     callback(user);
@@ -173,5 +176,7 @@ export {
   loadSpecificEvent,
   getNumEvents,
   incrementNumEvents,
-  addNewMember
+  addNewMember,
+  getDisplayName,
+  saveDisplayName
 };

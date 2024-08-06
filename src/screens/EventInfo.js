@@ -13,7 +13,7 @@ import ParlayEntry from "../components/ParlayEntry"
 
 export default function ({route, navigation}) {
   const { isDarkmode } = useTheme();
-  const {mode} = route.params;
+  const { mode } = route.params;
   return (
     <Layout>
         <Text
