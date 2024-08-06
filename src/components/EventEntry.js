@@ -47,7 +47,7 @@ export default (props) => {
         style={{ borderRadius: 10 }}
         onPress={() => {
           navigation.navigate("EventInfo", {
-            data: props
+            mode: props.eventType
           });
         }}>
         <SectionContent>
