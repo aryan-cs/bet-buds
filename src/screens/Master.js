@@ -27,7 +27,7 @@ export default function ({ navigation }) {
         for (let entry = 0; entry < eventsData.length; entry++) {
           const item = await loadSpecificEvent(eventsData[entry]);
           stack.push({
-            component: <EventEntry eventTitle={item.name} eventType={item.type} eventEnd={item.expiration} key={eventsData[entry]} />,
+            component: <EventEntry eventId = {eventsData[entry]} eventTitle={item.name} eventType={item.type} eventEnd={item.expiration} key={eventsData[entry]} />,
             expiration: item.expiration
           });
         }

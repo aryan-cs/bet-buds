@@ -169,6 +169,41 @@ const observeAuthState = (callback) => {
   });
 };
 
+const loadEventEntries = async (eventid) => {
+  try {
+    const docRef = doc(firestore, "events", eventid);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      members = docSnap.data().members;
+      members.push(docSnap.data().admin);
+      return members
+    } else {
+      console.log('Event entry data not found');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error reading data:', error);
+    return null;
+  }
+}
+
+const loadSpecificEntry = async (id) => {
+  try {
+    const docRef = doc(firestore, "users", id);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      console.log('Entries not found.');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error reading data:', error);
+    return null;
+  }
+};
+
+
 // Export the functions
 export {
   saveNewEvent,
@@ -178,5 +213,7 @@ export {
   incrementNumEvents,
   addNewMember,
   getDisplayName,
-  saveDisplayName
+  saveDisplayName,
+  loadEventEntries,
+  loadSpecificEntry
 };
