@@ -1,84 +1,77 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { getAuth } from "firebase/auth";
 import { View, ScrollView, TouchableOpacity, TouchableHighlight, RefreshControl } from 'react-native';
-import {
-  Layout,
-  Text,
-  themeColor,
-  useTheme,
-} from "react-native-rapi-ui";
+import { Layout, Text, themeColor, useTheme } from "react-native-rapi-ui";
 import EventEntry from "../components/EventEntry";
 import { Ionicons } from "@expo/vector-icons";
 import { loadUsersEvents, loadSpecificEvent } from '../provider/BaseProvider';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function ({ navigation }) {
   const { isDarkmode } = useTheme();
   const auth = getAuth();
 
-  const [refreshing, setRefreshing] = useState(false);
-  const [eventsList, setEventsList] = useState([]);
+  const [eventsList, setEventsList] = useState([]); // Start with empty list
+  const [loading, setLoading] = useState(true); // State for initial loading and refreshing
 
   const DBConnect = async () => {
     try {
-      const eventsData = await loadUsersEvents(getAuth().currentUser.uid);
-      if (eventsData) {
-        const stack = [];
-        for (let entry = 0; entry < eventsData.length; entry++) {
-          const item = await loadSpecificEvent(eventsData[entry]);
-          stack.push({
-            component: <EventEntry eventId = {eventsData[entry]} eventTitle={item.name} eventType={item.type} eventEnd={item.expiration} key={eventsData[entry]} />,
+      const eventsData = await loadUsersEvents(auth.currentUser.uid);
+      if (eventsData && eventsData.length > 0) {
+        const stack = await Promise.all(eventsData.map(async (eventId) => {
+          const item = await loadSpecificEvent(eventId);
+          return {
+            component: <EventEntry eventId={eventId} eventTitle={item.name} eventType={item.type} eventEnd={item.expiration} key={eventId} />,
             expiration: item.expiration
-          });
-        }
+          };
+        }));
         stack.sort((a, b) => a.expiration - b.expiration);
-        const sortedComponents = stack.map(event => event.component);
-        setEventsList(sortedComponents);
-      } else if (eventsData == null || eventsData.length < 1) {
-        setEventsList(
+        setEventsList(stack.map(event => event.component));
+      } else {
+        setEventsList([
           <Text
             size="h4"
             fontWeight="bold"
             style={{
               textAlign: "center",
-              textAlignVertical: "center",
               margin: "auto",
-              color: isDarkmode ? themeColor.gray500 : themeColor.gray200
-            }}> No events to display </Text>
-        );
+              color: isDarkmode ? themeColor.gray500 : themeColor.gray200,
+            }}
+            key="no-events-text"
+          >
+            No events to display
+          </Text>
+        ]);
       }
     } catch (error) {
       console.error('Error fetching events:', error);
+    } finally {
+      setLoading(false); // Set loading to false after data is fetched
     }
-  }
+  };
 
   const loadData = async () => {
-    setRefreshing(true);
-    DBConnect();
-    setRefreshing(false);
+    setLoading(true);
+    await DBConnect();
   };
 
   useEffect(() => {
-    loadData();
+    loadData(); // Initial load
+    // Optionally cleanup if needed
     return () => {};
   }, []);
 
   useFocusEffect(
     useCallback(() => {
-      const timer = setTimeout(async () => {
-        DBConnect();
-      }, 1000);
-      return () => clearTimeout(timer);
+      loadData(); // Reload data when screen comes into focus
+      // Optionally return cleanup if needed
     }, [])
   );
 
   return (
     <Layout>
-
       <TouchableHighlight
-        onPress={() => {
-          navigation.navigate("JoinEvent");
-        }}
+        onPress={() => navigation.navigate("JoinEvent")}
         underlayColor={themeColor.primary600}
         style={{
           position: "absolute",
@@ -90,18 +83,14 @@ export default function ({ navigation }) {
           width: 50,
           height: 50,
           alignItems: "center",
-          justifyContent: "center"
-        }}>
-        <Ionicons
-          name={"search-outline"}
-          color={themeColor.white}
-          size={25} />
+          justifyContent: "center",
+        }}
+      >
+        <Ionicons name={"search-outline"} color={themeColor.white} size={25} />
       </TouchableHighlight>
 
       <TouchableHighlight
-        onPress={() => {
-          navigation.navigate("NewEvent");
-        }}
+        onPress={() => navigation.navigate("NewEvent")}
         underlayColor={themeColor.primary600}
         style={{
           position: "absolute",
@@ -113,52 +102,36 @@ export default function ({ navigation }) {
           width: 50,
           height: 50,
           alignItems: "center",
-          justifyContent: "center"
-        }}>
-        <Ionicons
-          name={"add-outline"}
-          color={themeColor.white}
-          size={30} />
+          justifyContent: "center",
+        }}
+      >
+        <Ionicons name={"add-outline"} color={themeColor.white} size={30} />
       </TouchableHighlight>
 
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          paddingHorizontal: 15
-        }}>
-
-        <Text
-          size="h1"
-          fontWeight="bold"
-          style={{
-            paddingBottom: 5,
-          }}> Your Events </Text>
-
+      <View style={{ display: "flex", flexDirection: "row", paddingHorizontal: 15 }}>
+        <Text size="h1" fontWeight="bold" style={{ paddingBottom: 5 }}>
+          Your Events
+        </Text>
         <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("Settings");
-          }}
+          onPress={() => navigation.navigate("Settings")}
           style={{
             marginVertical: 'auto',
             marginLeft: "auto",
-          }}>
+          }}
+        >
           <Ionicons
             name={"ellipsis-vertical"}
             size={25}
-            color={isDarkmode ? themeColor.white : themeColor.black} />
+            color={isDarkmode ? themeColor.white : themeColor.black}
+          />
         </TouchableOpacity>
       </View>
 
       <ScrollView
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={loadData} />}
-        contentContainerStyle={{
-          flexGrow: 1,
-          alignContent: "center"
-        }}>
-
+        refreshControl={<RefreshControl refreshing={loading} onRefresh={loadData} />}
+        contentContainerStyle={{ flexGrow: 1, alignContent: "center" }}
+      >
         {eventsList}
-
       </ScrollView>
     </Layout>
   );
