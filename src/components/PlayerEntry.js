@@ -12,17 +12,22 @@ import {
     useTheme,
   } from "react-native-rapi-ui";
 import { useNavigation } from '@react-navigation/core';
+import { getAuth } from "firebase/auth";
 
 export default (props) => {
   const { isDarkmode } = useTheme();
   const navigation = useNavigation();
-
+  
   return (
     <View
       style={{
           marginHorizontal: 20,
           marginVertical: 10,
-          backgroundColor: isDarkmode ? themeColor.black200 : themeColor.white100,
+          backgroundColor: props.userID === getAuth().currentUser.uid
+          ? themeColor.primary
+          : isDarkmode
+            ? themeColor.black200
+            : themeColor.white100,
           borderRadius: 10,
       }}>
         <TouchableHighlight
@@ -45,14 +50,19 @@ export default (props) => {
                 style={{
                   fontSize: 20,
                   marginVertical: "auto",
-                  }}>{props.parlayUser}</Text>
+                  color: props.userID === getAuth().currentUser.uid
+                  ? themeColor.white100
+                  : isDarkmode
+                    ? themeColor.white100
+                    : themeColor.black200,
+                }}>{props.parlayUser}</Text>
               <Text
                 fontWeight="bold"
                 style={{
                   fontSize: 23,
                   marginLeft: 'auto',
                   marginVertical: "auto",
-                  color: themeColor.primary,
+                  color: props.userID === getAuth().currentUser.uid ? themeColor.white100 : themeColor.primary,
                 }}>{props.parlayProgress + "/10"}</Text>
           </SectionContent>
         </TouchableHighlight>

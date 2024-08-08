@@ -176,7 +176,7 @@ const loadEventEntries = async (eventid) => {
     if (docSnap.exists()) {
       members = docSnap.data().members;
       members.push(docSnap.data().admin);
-      return members
+      return members;
     } else {
       console.log('Event entry data not found');
       return null;

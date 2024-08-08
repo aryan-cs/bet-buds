@@ -63,7 +63,7 @@ export default function ({ navigation }) {
 
   useFocusEffect(
     useCallback(() => {
-      loadData(); // Reload data when screen comes into focus
+      // loadData(); // Reload data when screen comes into focus
       // Optionally return cleanup if needed
     }, [])
   );

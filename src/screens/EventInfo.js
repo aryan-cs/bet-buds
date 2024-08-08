@@ -12,18 +12,18 @@ import { loadEventEntries, loadSpecificEntry } from '../provider/BaseProvider';
 export default function ({ route, navigation }) {
   const { isDarkmode } = useTheme();
   const mode = route.params.mode;
-  const eventId = route.params.id;
+  const eventID = route.params.id;
   const [entryList, setEntryList] = useState([]);
   const [loading, setLoading] = useState(true); // State for initial loading and refreshing
 
   const DBConnect = async () => {
     try {
-      const entryIds = await loadEventEntries(eventId);
-      if (entryIds) {
-        const stack = await Promise.all(entryIds.map(async (entryId) => {
-          const item = await loadSpecificEntry(entryId);
+      const eventMembers = await loadEventEntries(eventID);
+      if (eventMembers) {
+        const stack = await Promise.all(eventMembers.map(async (memberID) => {
+          const item = await loadSpecificEntry(memberID);
           return {
-            component: <PlayerEntry parlayUser={item.displayName} parlayProgress={0} mode={mode} key={entryId} />,
+            component: <PlayerEntry parlayUser={item.displayName} userID={memberID} parlayProgress={0} mode={mode} key={memberID} />,
             progress: 0 // Change to sort by progress
           };
         }));
@@ -61,7 +61,7 @@ export default function ({ route, navigation }) {
   useEffect(() => {
     loadData(); // Initial load
     return () => {};
-  }, [eventId]); // Reload when eventId changes
+  }, [eventID]); // Reload when eventId changes
 
   return (
     <Layout>
