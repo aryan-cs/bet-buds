@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableHighlight } from 'react-native';
-import {
-  Text,
-  SectionContent,
-  themeColor,
-  useTheme,
-} from "react-native-rapi-ui";
+import { View, TouchableHighlight, Animated } from 'react-native';
+import { Text, SectionContent, themeColor, useTheme } from "react-native-rapi-ui";
 import { useNavigation } from '@react-navigation/core';
+import { Swipeable } from 'react-native-gesture-handler';
 
 export default (props) => {
   const { isDarkmode } = useTheme();
@@ -34,40 +30,86 @@ export default (props) => {
     return `${days}d ${hours}h ${minutes}m ${seconds}s`;
   };
 
+  const renderRightActions = () => {
+    return (
+      <View
+        style={{
+          backgroundColor: 'red',
+          justifyContent: 'center',
+          alignItems: 'flex-end',
+          width: 100,
+          marginRight: 20,
+          marginLeft: -30,
+          marginVertical: 10,
+          borderTopRightRadius: 10,
+          borderBottomRightRadius: 10,
+          paddingRight: 20,
+        }}
+      >
+        <Text
+          style={{
+            color: 'white',
+            fontWeight: 'bold',
+            fontSize: 18,
+          }}
+          onPress={() => props.onDelete(props.eventId)}
+        >
+          Delete
+        </Text>
+      </View>
+    );
+  };
+
   return (
-    <View
-      style={{
-        marginHorizontal: 20,
-        marginVertical: 10,
-        backgroundColor: isDarkmode ? themeColor.black200 : themeColor.white100,
-        borderRadius: 10,
-      }}>
-      <TouchableHighlight
-        underlayColor={isDarkmode ? themeColor.black300 : themeColor.white200}
-        style={{ borderRadius: 10 }}
-        onPress={() => {
-          navigation.navigate("EventInfo", {
-            mode: props.eventType,
-            id: props.eventId
-          });
-        }}>
-        <SectionContent>
-          <Text size="h3" fontWeight="bold">{props.eventTitle}</Text>
-          <Text
-            style={{
-              fontSize: 18,
-              marginTop: 3,
-              color: isDarkmode ? themeColor.gray400 : themeColor.gray500,
-            }}
-            italic="true">{props.eventType}</Text>
-          <Text
-            style={{
-              fontSize: 18,
-              marginTop: 3,
-              color: isDarkmode ? themeColor.gray400 : themeColor.gray500,
-            }} italic="true">{timeLeft > 0 ? formatTimeLeft(timeLeft) : 'Event has ended'}</Text>
-        </SectionContent>
-      </TouchableHighlight>
-    </View>
+    <Swipeable
+      renderRightActions={renderRightActions}
+      overshootRight={false}
+      friction={2}
+      rightThreshold={40}
+    >
+      <View
+        style={{
+          marginHorizontal: 20,
+          marginVertical: 10,
+          backgroundColor: isDarkmode ? themeColor.black200 : themeColor.white100,
+          borderRadius: 10,
+        }}
+      >
+        <TouchableHighlight
+          underlayColor={isDarkmode ? themeColor.black300 : themeColor.white200}
+          style={{ borderRadius: 10 }}
+          onPress={() => {
+            navigation.navigate("EventInfo", {
+              mode: props.eventType,
+              id: props.eventId,
+            });
+          }}
+        >
+          <SectionContent>
+            <Text size="h3" fontWeight="bold">{props.eventTitle}</Text>
+            <Text
+              style={{
+                fontSize: 18,
+                marginTop: 3,
+                color: isDarkmode ? themeColor.gray400 : themeColor.gray500,
+              }}
+              italic="true"
+            >
+              {props.eventType}
+            </Text>
+            <Text
+              style={{
+                fontSize: 18,
+                marginTop: 3,
+                color: isDarkmode ? themeColor.gray400 : themeColor.gray500,
+              }}
+              italic="true"
+            >
+              {timeLeft > 0 ? formatTimeLeft(timeLeft) : 'Event has ended'}
+            </Text>
+          </SectionContent>
+        </TouchableHighlight>
+      </View>
+    </Swipeable>
   );
 };

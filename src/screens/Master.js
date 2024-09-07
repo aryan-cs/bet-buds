@@ -129,7 +129,7 @@ export default function ({ navigation }) {
 
       <ScrollView
         refreshControl={<RefreshControl refreshing={loading} onRefresh={loadData} />}
-        contentContainerStyle={{ flexGrow: 1, alignContent: "center" }}
+        contentContainerStyle={{ flexGrow: 1, alignContent: "center", }}
       >
         {eventsList}
       </ScrollView>

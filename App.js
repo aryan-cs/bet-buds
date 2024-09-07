@@ -3,6 +3,8 @@ import AppNavigator from "./src/navigation/AppNavigator";
 import { AuthProvider } from "./src/provider/AuthProvider";
 import { ThemeProvider } from "react-native-rapi-ui";
 import { LogBox } from "react-native";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 
 export default function App() {
   const images = [
@@ -22,9 +24,11 @@ export default function App() {
 
   return (
     <ThemeProvider images={images}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
       <AuthProvider>
         <AppNavigator />
       </AuthProvider>
+      </GestureHandlerRootView>
     </ThemeProvider>
   );
 }
