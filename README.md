@@ -1,6 +1,6 @@
-# bet buds | A friend group betting app
+# wato | what are the odds...
 
-This app is inspired from the popular show Brooklyn Nine-Nine, which features a game called Boyle Bingo.
+A social betting app inspired from the popular show Brooklyn Nine-Nine, which features a game called Boyle Bingo.
 
 
 ## Authors
@@ -10,7 +10,7 @@ This app is inspired from the popular show Brooklyn Nine-Nine, which features a 
 
 ## Installation
 
-Install called-it with npm
+Install wato with npm
 
 ```bash
   npm install called-it
