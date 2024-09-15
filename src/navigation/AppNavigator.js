@@ -22,12 +22,13 @@ import ForgetPassword from "../screens/auth/ForgetPassword";
 import { AuthContext } from "../provider/AuthProvider";
 import EventInfo from "../screens/EventInfo";
 import ParlayInfo from "../screens/ParlayInfo";
-import BetInfo from "../screens/BetInfo";
+import BetEntry from "../components/BetEntry";
 import NewEvent from "../screens/NewEvent";
 import JoinEvent from "../screens/JoinEvent";
 import BingoSquareInfo from "../screens/BingoSquareInfo";
 import Settings from "../screens/Settings";
 import BingoBoardInfo from "../screens/BingoBoardInfo";
+import NewBet from "../screens/NewBet";
 
 const { firebaseConfig } = getEnvVars();
 
@@ -58,13 +59,14 @@ const Main = () => {
       }}>
       <MainStack.Screen name="MainTabs" component={MainTabs} />
       <MainStack.Screen name="EventInfo" component={EventInfo} />
-      <MainStack.Screen name="BetInfo" component={BetInfo} />
+      <MainStack.Screen name="BetEntry" component={BetEntry} />
       <MainStack.Screen name="ParlayInfo" component={ParlayInfo} />
       <MainStack.Screen name="NewEvent" component={NewEvent} />
       <MainStack.Screen name="JoinEvent" component={JoinEvent} />
       <MainStack.Screen name="BingoSquareInfo" component={BingoSquareInfo} />
       <MainStack.Screen name="BingoBoardInfo" component={BingoBoardInfo} />
       <MainStack.Screen name="Settings" component={Settings} />
+      <MainStack.Screen name="NewBet" component={NewBet} />
     </MainStack.Navigator>
   );
 };

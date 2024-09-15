@@ -1,7 +1,7 @@
 // BaseProvider.js
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, collection, getCountFromServer } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, collection, getCountFromServer, deleteDoc, arrayRemove  } from 'firebase/firestore';
 import getEnvVars from '../../config';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import { generateCode } from "../scripts/GenerateJoinCode"
@@ -14,10 +14,11 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const firestore = getFirestore(app);
 
-const saveNewEvent = async (admin, name, expiration, type, size, code) => {
+const saveNewEvent = async (admin, name, startTime, expiration, type, size, code) => {
   try {
     await setDoc(doc(firestore, "events", (code)), {
       name: name,
+      startTime: startTime, // Save the start time
       expiration: expiration,
       type: type,
       size: size,
@@ -30,11 +31,61 @@ const saveNewEvent = async (admin, name, expiration, type, size, code) => {
     }).catch((error) => {
       setDoc(doc(firestore, "users", admin), {
         currentEvents: arrayUnion(code)
-      })
-    })
+      });
+    });
     console.log('Data written successfully');
   } catch (error) {
     console.error('Error writing data:', error);
+  }
+};
+
+const deleteEvent = async (eventId) => {
+  try {
+    // Reference to the event document
+    const eventDocRef = doc(firestore, "events", eventId);
+
+    // Retrieve the event document to get the members and admin
+    const eventDoc = await getDoc(eventDocRef);
+
+    if (eventDoc.exists()) {
+      const eventData = eventDoc.data();
+      const members = eventData.members || [];
+
+      // Add the admin to the members list if not already included
+      if (eventData.admin && !members.includes(eventData.admin)) {
+        members.push(eventData.admin);
+      }
+
+      // Remove the event ID from each user's 'currentEvents' list
+      await Promise.all(members.map(async (memberId) => {
+        const userDocRef = doc(firestore, "users", memberId);
+        await updateDoc(userDocRef, {
+          currentEvents: arrayRemove(eventId)
+        });
+      }));
+
+      // Now delete the event document
+      await deleteDoc(eventDocRef);
+
+      console.log('Event deleted successfully');
+    } else {
+      console.log('Event does not exist');
+    }
+  } catch (error) {
+    console.error('Error deleting event:', error);
+    throw error; // Rethrow to handle in the caller
+  }
+};
+
+const removeEvent = async (userId, eventId) => {
+  try {
+    const userDocRef = doc(firestore, "users", userId);
+    await updateDoc(userDocRef, {
+      currentEvents: arrayRemove(eventId),
+    });
+  } catch (error) {
+    console.error('Error removing event from user:', error);
+    throw error;
   }
 };
 
@@ -61,6 +112,7 @@ const loadSpecificEvent = async (id) => {
     if (docSnap.exists()) {
       return docSnap.data();
     } else {
+      console.log(id)
       console.log('Event not found.');
       return null;
     }
@@ -203,6 +255,26 @@ const loadSpecificEntry = async (id) => {
   }
 };
 
+const loadBetEntries = async (id) => {
+  try {
+   
+  } catch (error) {
+    console.error('Error reading data:', error);
+    return null;
+  }
+};
+
+const saveNewBet = async (admin, name, difficulty) => {
+  try {
+    await setDoc(doc(firestore, "bets", (code)), { //edit this path
+      name: name,
+      difficulty: difficulty
+    });
+    
+  } catch (error) {
+    console.error('Error writing data:', error);
+  }
+};
 
 // Export the functions
 export {
@@ -215,5 +287,9 @@ export {
   getDisplayName,
   saveDisplayName,
   loadEventEntries,
-  loadSpecificEntry
+  loadSpecificEntry,
+  loadBetEntries,
+  deleteEvent,
+  removeEvent,
+  saveNewBet
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableHighlight, Animated } from 'react-native';
+import { View, TouchableHighlight } from 'react-native';
 import { Text, SectionContent, themeColor, useTheme } from "react-native-rapi-ui";
 import { useNavigation } from '@react-navigation/core';
 import { Swipeable } from 'react-native-gesture-handler';
@@ -7,9 +7,21 @@ import { Swipeable } from 'react-native-gesture-handler';
 export default (props) => {
   const { isDarkmode } = useTheme();
   const navigation = useNavigation();
+  const [isPressed, setIsPressed] = useState(false); // State to track button press
 
+  // Function to calculate the time difference between the current time and the start/end time
   const calculateTimeLeft = () => {
-    return props.eventEnd * 1000 - Date.now();
+    const now = Date.now();
+    const eventStart = props.eventStart * 1000;
+    const eventEnd = props.eventEnd * 1000;
+
+    if (now < eventStart) {
+      return eventStart - now;  // Time until the event starts
+    } else if (now < eventEnd) {
+      return eventEnd - now;  // Time until the event ends
+    } else {
+      return 0;  // Event has ended
+    }
   };
 
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
@@ -19,22 +31,43 @@ export default (props) => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
 
-    return () => clearInterval(interval);
-  }, [props.eventEnd]);
+    return () => clearInterval(interval);  // Clean up the interval on component unmount
+  }, [props.eventStart, props.eventEnd]);
 
+  // Format the time left into days, hours, minutes, and seconds
   const formatTimeLeft = (time) => {
+    if (time <= 0) {
+      return 'Event has ended';
+    }
+  
     const days = Math.floor(time / (1000 * 60 * 60 * 24));
     const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((time % (1000 * 60)) / 1000);
-    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
-  };
+  
+    if (days > 0) {
+      return `${days}d`;
+    } else if (hours > 0) {
+      return `${hours}h`;
+    } else if (minutes > 0) {
+      return `${minutes}m`;
+    } else {
+      return `${seconds}s`;
+    }
+  };  
 
-  const renderRightActions = () => {
+  const renderRightActions = (progress, dragX) => {
     return (
-      <View
+      <TouchableHighlight
+        onPress={() => {
+          if (props.onDelete) {
+            props.onDelete(props.eventId);
+          }
+          setIsPressed(true); // Set button state to pressed
+          setTimeout(() => setIsPressed(false), 200); // Reset button state after 200ms
+        }}
         style={{
-          backgroundColor: 'red',
+          backgroundColor: isPressed ? themeColor.danger600 : themeColor.danger,
           justifyContent: 'center',
           alignItems: 'flex-end',
           width: 100,
@@ -45,18 +78,26 @@ export default (props) => {
           borderBottomRightRadius: 10,
           paddingRight: 20,
         }}
+        underlayColor={themeColor.danger600} // Color when button is pressed
       >
-        <Text
+        <View
           style={{
-            color: 'white',
-            fontWeight: 'bold',
-            fontSize: 18,
+            justifyContent: 'center',
+            alignItems: 'center',
+            flex: 1,
           }}
-          onPress={() => props.onDelete(props.eventId)}
         >
-          Delete
-        </Text>
-      </View>
+          <Text
+            style={{
+              color: 'white',
+              fontWeight: 'bold',
+              fontSize: 18,
+            }}
+          >
+            Delete
+          </Text>
+        </View>
+      </TouchableHighlight>
     );
   };
 
@@ -105,7 +146,9 @@ export default (props) => {
               }}
               italic="true"
             >
-              {timeLeft > 0 ? formatTimeLeft(timeLeft) : 'Event has ended'}
+              {timeLeft > 0 ? 
+                (Date.now() < props.eventStart * 1000 ? `Starts in ${formatTimeLeft(timeLeft)}` : `Ends in ${formatTimeLeft(timeLeft)}`) 
+                : 'Event has ended'}
             </Text>
           </SectionContent>
         </TouchableHighlight>

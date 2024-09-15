@@ -4,7 +4,7 @@ import { View, ScrollView, TouchableOpacity, TouchableHighlight, RefreshControl 
 import { Layout, Text, themeColor, useTheme } from "react-native-rapi-ui";
 import EventEntry from "../components/EventEntry";
 import { Ionicons } from "@expo/vector-icons";
-import { loadUsersEvents, loadSpecificEvent } from '../provider/BaseProvider';
+import { loadUsersEvents, loadSpecificEvent, removeEvent } from '../provider/BaseProvider'; // Import removeEvent function
 import { useFocusEffect } from '@react-navigation/native';
 
 export default function ({ navigation }) {
@@ -21,14 +21,23 @@ export default function ({ navigation }) {
         const stack = await Promise.all(eventsData.map(async (eventId) => {
           const item = await loadSpecificEvent(eventId);
           return {
-            component: <EventEntry eventId={eventId} eventTitle={item.name} eventType={item.type} eventEnd={item.expiration} key={eventId} />,
+            id: eventId,
+            component: <EventEntry
+              eventId={eventId}
+              eventTitle={item.name}
+              eventType={item.type}
+              eventStart={item.startTime}
+              eventEnd={item.expiration}
+              key={eventId}
+              onDelete={handleDeleteEvent} // Pass delete function as prop
+            />,
             expiration: item.expiration
           };
         }));
         stack.sort((a, b) => a.expiration - b.expiration);
         setEventsList(stack.map(event => event.component));
       } else {
-        setEventsList([
+        setEventsList([ 
           <Text
             size="h4"
             fontWeight="bold"
@@ -63,10 +72,22 @@ export default function ({ navigation }) {
 
   useFocusEffect(
     useCallback(() => {
-      // loadData(); // Reload data when screen comes into focus
-      // Optionally return cleanup if needed
+      loadData(); // Reload data when screen comes into focus
     }, [])
   );
+
+  const handleDeleteEvent = async (eventId) => {
+    try {
+      // Remove the event only for the current user
+      await removeEvent(auth.currentUser.uid, eventId);
+    
+      // Update local state to remove the event from the list
+      setEventsList((prevEvents) => prevEvents.filter(event => event.props.eventId !== eventId));
+    } catch (error) {
+      console.error('Error removing event:', error);
+    }
+  };
+  
 
   return (
     <Layout>
