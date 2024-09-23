@@ -13,10 +13,10 @@ import { Ionicons } from "@expo/vector-icons";
 export default function ({ route, navigation }) {
   const { isDarkmode } = useTheme();
   // const mode = route.params.mode;
-  // const eventId = route.params.id;
+  const eventId = route.params.id;
 
   const mode = "classic";
-  const eventId = 1;
+  // const eventId = 1;
 
   const [entryList, setEntryList] = useState([]);
   const [loading, setLoading] = useState(true); // State for initial loading and refreshing
@@ -82,7 +82,11 @@ export default function ({ route, navigation }) {
       </Text>
 
       <TouchableHighlight
-        onPress={() => navigation.navigate("NewBet")}
+        onPress={() => {
+          navigation.navigate("NewBet", {
+            eventId: route.params.id,
+          });
+        }}
         underlayColor={themeColor.primary600}
         style={{
           position: "absolute",

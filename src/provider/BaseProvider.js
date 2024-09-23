@@ -1,7 +1,7 @@
 // BaseProvider.js
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion, collection, getCountFromServer, deleteDoc, arrayRemove  } from 'firebase/firestore';
+import { getFirestore, addDoc, doc, setDoc, getDoc, updateDoc, arrayUnion, collection, getCountFromServer, deleteDoc, arrayRemove  } from 'firebase/firestore';
 import getEnvVars from '../../config';
 import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
 import { generateCode } from "../scripts/GenerateJoinCode"
@@ -23,7 +23,7 @@ const saveNewEvent = async (admin, name, startTime, expiration, type, size, code
       type: type,
       size: size,
       admin: admin,
-      members: []
+      members: [],
     });
 
     await updateDoc(doc(firestore, "users", admin), {
@@ -165,7 +165,7 @@ async function addNewMember(eventID, memberID) {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       await updateDoc(doc(firestore, "events", eventID), {
-        members: arrayUnion(memberID)
+        members: arrayUnion(memberID),
       }).then(
         await updateDoc(doc(firestore, "users", memberID), {
           currentEvents: arrayUnion(eventID)
@@ -264,12 +264,37 @@ const loadBetEntries = async (id) => {
   }
 };
 
-const saveNewBet = async (admin, name, difficulty) => {
+const saveNewBet = async (memberId, name, difficulty, eventId) => {
+  console.log(eventId);
   try {
-    await setDoc(doc(firestore, "bets", (code)), { //edit this path
-      name: name,
-      difficulty: difficulty
-    });
+    const docRef = doc(firestore, "events", eventId.toUpperCase());
+    const docSnap = await getDoc(docRef);
+
+    const docRef2 = doc(firestore, "users", memberId);
+    const docSnap2 = await getDoc(docRef2);
+
+    var storedId = "";
+
+    if(docSnap.exists()){
+      await addDoc(collection(firestore, "events", eventId, "bets"), { //edit this path
+        betName: name,
+        difficulty: difficulty
+      }).then(docRef => {
+        storedId = docRef.id;
+      })
+    } else {
+        console.log('Unable to add bet to event.');
+        return null;
+      }
+
+    if(docSnap2.exists()) {
+      await setDoc(doc(firestore, "users", memberId), { 
+        bets: arrayUnion(doc(firestore, "events", eventId, "bets", storedId)),
+      });
+    } else {
+      console.log('Unable to add bet to member.');
+      return null;
+    }
     
   } catch (error) {
     console.error('Error writing data:', error);
