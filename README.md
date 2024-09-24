@@ -1,6 +1,6 @@
 # wato | what are the odds...
 
-A social betting app inspired from the popular show Brooklyn Nine-Nine, which features a game called Boyle Bingo.
+A social betting app inspired by Boyle Bingo (Brooklyn Nine-Nine) and Marshall & Lily's Long Term Bets (How I Met Your Mother).
 
 
 ## Authors
