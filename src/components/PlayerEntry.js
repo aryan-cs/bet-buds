@@ -36,7 +36,9 @@ export default (props) => {
           onPress={() => {
             {props.mode == "Bingo"
               ? navigation.navigate("BingoBoardInfo")
-              : navigation.navigate("ParlayInfo");
+              : navigation.navigate("ParlayInfo", {
+                  id: props.eventId,
+                });
             }
           }}>
           <SectionContent

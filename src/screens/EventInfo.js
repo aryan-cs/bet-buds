@@ -23,7 +23,7 @@ export default function ({ route, navigation }) {
         const stack = await Promise.all(eventMembers.map(async (memberID) => {
           const item = await loadSpecificEntry(memberID);
           return {
-            component: <PlayerEntry parlayUser={item.displayName} userID={memberID} parlayProgress={0} mode={mode} key={memberID} />,
+            component: <PlayerEntry parlayUser={item.displayName} userID={memberID} parlayProgress={0} mode={mode} key={memberID} eventId = {eventID}/>,
             progress: 0 // Change to sort by progress
           };
         }));

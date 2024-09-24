@@ -12,7 +12,7 @@ import { getAuth } from "firebase/auth";
 import { saveNewBet } from '../provider/BaseProvider';
 import { Slider } from '@rneui/themed'; // Correct import for Slider
 
-export default function ({ navigation }) {
+export default function ({route, navigation }) {
   const { isDarkmode } = useTheme();
   const [betName, setBetName] = useState("");
   const [difficulty, setDifficulty] = useState(3);  // Default value for slider
@@ -26,7 +26,8 @@ export default function ({ navigation }) {
       saveNewBet(
         getAuth().currentUser.uid,
         betName,
-        difficulty
+        difficulty,
+        route.params.eventId
       );
       navigation.goBack();
     }
