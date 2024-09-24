@@ -255,9 +255,27 @@ const loadSpecificEntry = async (id) => {
   }
 };
 
-const loadBetEntries = async (id) => {
+const loadBetEntries = async (memberId, eventId) => {
   try {
-   
+    // Get the user's betsList document
+    const userDocRef = doc(firestore, "users", memberId);
+    const userDocSnap = await getDoc(userDocRef);
+    
+    if (userDocSnap.exists()) {
+      // console.log("User data:", userDocSnap.data());
+      const betsList = userDocSnap.data().betsList; // Assuming betsList is an array of references
+      const betPromises = betsList.map(async (betRef) => {
+        const betDocSnap = await getDoc(betRef); // Fetch each bet using its reference
+        return betDocSnap.exists() ? betDocSnap.data() : null;
+      });
+
+      // Wait for all bets to load
+      const bets = await Promise.all(betPromises);
+      return bets.filter(bet => bet !== null); // Filter out any null bets (if some failed)
+    } else {
+      console.log("No such user!");
+      return null;
+    }
   } catch (error) {
     console.error('Error reading data:', error);
     return null;
@@ -275,31 +293,34 @@ const saveNewBet = async (memberId, name, difficulty, eventId) => {
 
     var storedId = "";
 
-    if(docSnap.exists()){
-      await addDoc(collection(firestore, "events", eventId, "bets"), { //edit this path
+    if (docSnap.exists()) {
+      // Add the bet to the betsList in the event
+      await addDoc(collection(firestore, "events", eventId, "betsList"), { 
         betName: name,
         difficulty: difficulty
       }).then(docRef => {
         storedId = docRef.id;
-      })
-    } else {
-        console.log('Unable to add bet to event.');
-        return null;
-      }
-
-    if(docSnap2.exists()) {
-      await setDoc(doc(firestore, "users", memberId), { 
-        bets: arrayUnion(doc(firestore, "events", eventId, "bets", storedId)),
       });
+    } else {
+      console.log('Unable to add bet to event.');
+      return null;
+    }
+
+    if (docSnap2.exists()) {
+      // Update betsList in the user's document without overwriting the entire document
+      await setDoc(doc(firestore, "users", memberId), {
+        betsList: arrayUnion(doc(firestore, "events", eventId, "betsList", storedId))
+      }, { merge: true }); // Use merge to update the document
     } else {
       console.log('Unable to add bet to member.');
       return null;
     }
-    
+
   } catch (error) {
     console.error('Error writing data:', error);
   }
 };
+
 
 // Export the functions
 export {

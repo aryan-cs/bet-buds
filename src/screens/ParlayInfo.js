@@ -9,6 +9,8 @@ import {
 import PlayerEntry from "../components/PlayerEntry";
 import { loadEventEntries, loadSpecificEntry, loadBetEntries } from '../provider/BaseProvider';
 import { Ionicons } from "@expo/vector-icons";
+import { getAuth } from "firebase/auth";
+import BetEntry from "../components/BetEntry";
 
 export default function ({ route, navigation }) {
   const { isDarkmode } = useTheme();
@@ -23,18 +25,31 @@ export default function ({ route, navigation }) {
 
   const DBConnect = async () => {
     try {
-      const entryIds = await loadBetEntries(eventId);
-      if (entryIds) {
-        const stack = await Promise.all(entryIds.map(async (entryId) => {
-          const item = await loadSpecificEntry(entryId);
+      const entryData = await loadBetEntries(getAuth().currentUser.uid, eventId);
+      
+      if (entryData && entryData.length > 0) {
+        const stack = await Promise.all(entryData.map(async (entry) => {
+          const { betName, difficulty } = entry; // Extract the relevant fields
+          // const item = await loadSpecificEntry(entry); // Optionally load specific details if needed
+  
           return {
-            component: <BetEntry parlayUser={item.displayName} userID={memberID} parlayProgress={0} mode={mode} key={memberID} />,
-            progress: 0 // Change to sort by progress
+            component: (
+              <BetEntry 
+                name={betName} 
+                difficulty={difficulty}
+                key={Math.floor(Math.random() * 100)} 
+              />
+            ),
+            progress: difficulty // Use difficulty as the sorting criteria for progress
           };
         }));
+  
+        // Sort by difficulty/progress and set the entry list
         stack.sort((a, b) => a.progress - b.progress);
         setEntryList(stack.map(entry => entry.component));
+  
       } else {
+        // Handle case when no entries are available
         setEntryList([
           <Text
             size="h4"
@@ -45,7 +60,7 @@ export default function ({ route, navigation }) {
               margin: "auto",
               color: isDarkmode ? themeColor.gray500 : themeColor.gray200
             }}
-            key="no-events-text"
+            key="no-bets-text"
           >
             No bets to display
           </Text>
@@ -54,9 +69,9 @@ export default function ({ route, navigation }) {
     } catch (error) {
       console.error('Error fetching entries:', error);
     } finally {
-      setLoading(false); // Set loading to false after data is fetched
+      setLoading(false); // Ensure loading is set to false after fetching is done
     }
-  };
+  };  
 
   const loadData = async () => {
     setLoading(true);

@@ -33,12 +33,13 @@ export default (props) => {
         <TouchableHighlight
           underlayColor={isDarkmode ? themeColor.black300 : themeColor.white200}
           style={{borderRadius: 10}}
-          onPress={() => {
-            {props.mode == "Bingo"
-              ? navigation.navigate("BingoBoardInfo")
-              : navigation.navigate("ParlayInfo");
-            }
-          }}>
+          // onPress={() => {
+          //   {props.mode == "Bingo"
+          //     ? navigation.navigate("BingoBoardInfo")
+          //     : navigation.navigate("ParlayInfo");
+          //   }
+          // }}
+          >
           <SectionContent
             style={{
               display: "flex",
@@ -50,12 +51,13 @@ export default (props) => {
                 style={{
                   fontSize: 20,
                   marginVertical: "auto",
+                  maxWidth: "80%",
                   color: props.userID === getAuth().currentUser.uid
                   ? themeColor.white100
                   : isDarkmode
                     ? themeColor.white100
                     : themeColor.black200,
-                }}>{props.parlayUser}</Text>
+                }}>{props.name}</Text>
               <Text
                 fontWeight="bold"
                 style={{
@@ -63,7 +65,8 @@ export default (props) => {
                   marginLeft: 'auto',
                   marginVertical: "auto",
                   color: props.userID === getAuth().currentUser.uid ? themeColor.white100 : themeColor.primary,
-                }}>{props.parlayProgress + "/10"}</Text>
+                }}>{props.difficulty + ":1"}</Text>
+                {/* i dont know how odds work... @sdayaneni help */}
           </SectionContent>
         </TouchableHighlight>
     </View>

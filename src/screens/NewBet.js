@@ -12,7 +12,7 @@ import { getAuth } from "firebase/auth";
 import { saveNewBet } from '../provider/BaseProvider';
 import { Slider } from '@rneui/themed'; // Correct import for Slider
 
-export default function ({route, navigation }) {
+export default function ({ route, navigation }) {
   const { isDarkmode } = useTheme();
   const [betName, setBetName] = useState("");
   const [difficulty, setDifficulty] = useState(3);  // Default value for slider
@@ -23,17 +23,16 @@ export default function ({route, navigation }) {
     if (!betName.trim()) { 
       missingInformation("Bet Name", "Please enter a valid bet name.");
     } else {
-      saveNewBet(
+      await saveNewBet(
         getAuth().currentUser.uid,
         betName,
-        difficulty,
+        Math.round(difficulty),  // Round difficulty before saving
         route.params.eventId
       );
       navigation.goBack();
     }
   };
 
-  // Function to get the difficulty message
   const getDifficultyMessage = () => {
     switch (Math.round(difficulty)) {
       case 1:
@@ -88,7 +87,7 @@ export default function ({route, navigation }) {
         <Text style={{ marginTop: 20, marginBottom: 5 }} fontWeight="bold">Select difficulty:</Text>
         <Slider
           value={difficulty}
-          onValueChange={(value) => setDifficulty((value))}
+          onValueChange={setDifficulty}  // Directly passing the state setter
           minimumValue={1}
           maximumValue={5}
           thumbTintColor={themeColor.primary}  // Adjust thumb color
@@ -101,7 +100,7 @@ export default function ({route, navigation }) {
           thumbStyle={{
             width: 20,  // Width of the thumb button
             height: 30,  // Height of the thumb button
-            borderRadius: 5,  // Make thumb fully round
+            borderRadius: 5,  // Rounded thumb
             borderWidth: 2,
             borderColor: themeColor.primary, 
             backgroundColor: themeColor.primary,
